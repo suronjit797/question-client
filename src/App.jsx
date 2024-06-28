@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="">
-      <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+      <ConfigProvider >
         <RouterProvider router={routes}></RouterProvider>
       </ConfigProvider>
     </div>
