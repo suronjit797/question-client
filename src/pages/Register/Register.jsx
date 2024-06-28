@@ -38,6 +38,7 @@ const Register = () => {
       <div className=" col-span-3  p-10 bg-black bg-opacity-15 rounded-xl ">
         <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">Registration</div>
         <Form
+        
           className=" text-white"
           name="register"
           onFinish={postFormData}
