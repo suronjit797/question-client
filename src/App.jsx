@@ -1,17 +1,18 @@
 import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import { useEffect } from "react";
-import { useGetUserProfileQuery } from "./redux/api/Apis/userApi";
-import { ConfigProvider, Space, theme } from "antd";
-import { useDispatch } from "react-redux";
-import { authRole } from "./redux/features/UserSlice/UserSlice";
+import { ConfigProvider, theme } from "antd";
 import { routes } from "./routes/Routes";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function App() {
-  const { isLoading, data } = useGetUserProfileQuery({});
-  const dispatch = useDispatch();
+  const { token, isLogin, user } = useSelector((state) => state.auth);
+  // set axios default auth token
+  axios.defaults.headers.common["Authorization"] = token;
 
+  // net error
   useEffect(() => {
     if (!navigator.onLine) {
       Swal.fire({
@@ -26,10 +27,6 @@ function App() {
       });
     }
   }, []);
-
-  useEffect(() => {
-    dispatch(authRole({ role: data?.data?.role }));
-  }, [data?.data?.role]);
 
   return (
     <div className="">
