@@ -5,13 +5,15 @@ import Footer from "../components/Footer/Footer";
 
 const MainLayout = () => {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main className="body">
         <Outlet />
       </main>
-      <Footer />
-    </>
+      <div className="mt-auto">
+        <Footer />
+      </div>
+    </div>
   );
 };
 

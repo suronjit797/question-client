@@ -107,7 +107,7 @@ const Login = () => {
           <h1 className=" h-[2px] rounded my-auto w-[40%] bg-gray-500" />
         </div>
         <div className="text-xl mt-0 text-center font-semibold">
-          Don't have an account? <Link to="/login" className=" text-xl text-[#BDE4A7] font-semibold">
+          Don't have an account? <Link to="/register" className=" text-xl text-[#BDE4A7] font-semibold">
             Sing Up
           </Link>
         </div>

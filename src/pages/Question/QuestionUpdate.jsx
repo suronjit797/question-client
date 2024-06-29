@@ -2,7 +2,7 @@
 const QuestionUpdate = () => {
     return (
         <div>
-            
+            update
         </div>
     );
 };
