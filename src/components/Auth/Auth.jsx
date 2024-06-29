@@ -17,7 +17,7 @@ const Auth = ({ children, roles = [] }) => {
     if (isLogin && Array.isArray(roles) && roles.length) {
       const hasAccess = [...roles, "superAdmin"];
       if (!hasAccess.includes(user?.role)) {
-        navigate("/");
+        navigate(-1);
       }
     }
   }, [roles, isLogin]);
