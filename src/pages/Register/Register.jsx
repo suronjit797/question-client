@@ -36,8 +36,10 @@ const Register = () => {
     <div className=" bg-[url('/photo/photo1.webp')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
       <div className=" md:col-span-4"></div>
       <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 md:h-full bg-black bg-opacity-35 rounded-xl ">
-        <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">Registration</div>
-        <Form        
+        <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">
+          Registration
+        </div>
+        <Form
           className=" text-white"
           name="register"
           onFinish={postFormData}
@@ -46,7 +48,9 @@ const Register = () => {
           layout="vertical"
         >
           <Form.Item
-            label={<span style={{  fontSize: '16px', color: 'white' }}>Name</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>Name</span>
+            }
             name="name"
             rules={[
               {
@@ -88,7 +92,9 @@ const Register = () => {
 
           <Form.Item
             name="email"
-            label={<span style={{  fontSize: '16px', color: 'white' }}>E-mail</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>E-mail</span>
+            }
             rules={[
               {
                 type: "email",
@@ -104,7 +110,9 @@ const Register = () => {
           </Form.Item>
 
           <Form.Item
-            label={<span style={{  fontSize: '16px', color: 'white' }}>Password</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>Password</span>
+            }
             name="password"
             rules={[
               {
@@ -122,7 +130,11 @@ const Register = () => {
 
           <Form.Item
             name="confirm"
-            label={<span style={{  fontSize: '16px', color: 'white' }}>Confirm Password</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>
+                Confirm Password
+              </span>
+            }
             dependencies={["password"]}
             rules={[
               {
@@ -143,13 +155,20 @@ const Register = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button className="btn btn-primary" type="primary" htmlType="submit">
+            <Button
+              className="btn btn-primary"
+              type="primary"
+              htmlType="submit"
+            >
               Submit
             </Button>
           </Form.Item>
         </Form>
         <div className="text-xl text-center font-semibold">
-          Already Registered? <Link to="/register" className=" text-xl text-[#BDE4A7] font-semibold">Sing In</Link>
+          Already Registered?{" "}
+          <Link to="/login" className=" text-xl text-[#BDE4A7] font-semibold">
+            Sing In
+          </Link>
         </div>
       </div>
     </div>

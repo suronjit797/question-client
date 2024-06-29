@@ -14,22 +14,31 @@ const Header = () => {
     navigate("/login");
   };
   return (
-    <>
-      <Link to="/"> home </Link>
-      {isLogin ? (
-        <span className="mx-4">
-          <span className="mx-4">{user.role}</span>
-          <Button type="primary" danger onClick={handleLogout}>
-            Logout
-          </Button>
-        </span>
-      ) : (
-        <>
-          <Link to="/login"> login </Link>
-          <Link to="/register"> register </Link>
-        </>
-      )}
-    </>
+    <div className=" bg-blue-300 py-3 capitalize">
+      <div className="container flex items-center  mx-auto">
+        <div className="me-3">
+          <Link to="/"> home </Link>
+        </div>
+        <div className="me-3">
+          <Link to="/question"> question </Link>
+        </div>
+        <div className="ms-auto">
+          {isLogin ? (
+            <span className="mx-4">
+              <span className="mx-4">{user.role}</span>
+              <Button type="primary" danger onClick={handleLogout}>
+                Logout
+              </Button>
+            </span>
+          ) : (
+            <>
+              <Link to="/login"> login </Link>
+              <Link to="/register"> register </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
