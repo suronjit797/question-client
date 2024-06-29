@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import QuestionForm from "../Question/QuestionForm";
 
 const fetchUsers = async () => {
   const { data } = await axios.get("/users");
@@ -17,6 +18,7 @@ const Home = ({}) => {
     <>
       {" "}
       <h1 className="text-3xl font-bold underline">Home!</h1>{" "}
+      <QuestionForm/>
     </>
   );
 };
