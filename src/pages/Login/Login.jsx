@@ -1,9 +1,10 @@
 import { Button, Form, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../../redux/features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const loginFunction = async (newTodo) => {
   const { data } = await axios.post("/users/login", newTodo);
@@ -11,9 +12,9 @@ const loginFunction = async (newTodo) => {
 };
 
 const Login = () => {
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { token, isLogin, user } = useSelector((state) => state.auth);
   const mutation = useMutation({
     mutationKey: ["login"],
     mutationFn: loginFunction,
@@ -31,12 +32,18 @@ const Login = () => {
           console.log("User Login Failed");
         }
       }
-      navigate("/")
+      navigate("/");
     },
   });
 
+  // navigate to home if login
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/");
+    }
+  }, [isLogin]);
+
   const handleLogin = () => {
-    console.log("click", mutation);
     mutation.mutate({
       email: "admin@admin.site",
       password: "admin##",
@@ -46,7 +53,9 @@ const Login = () => {
   return (
     <div className=" bg-[url('https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826')] h-screen bg-cover bg-center grid grid-cols-7 min-h-screen text-white p-6 overflow-hidden ">
       <div className=" col-span-3 grid items-center grid-flow-row p-10 bg-black bg-opacity-15 rounded-xl ">
-        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">Log In</div>
+        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">
+          Log In
+        </div>
         <Form
           name="register"
           onFinish={handleLogin}
@@ -89,14 +98,19 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button className="btn btn-primary" type="primary" htmlType="submit">
+            <Button
+              className="btn btn-primary"
+              type="primary"
+              htmlType="submit"
+            >
               Submit
             </Button>
           </Form.Item>
         </Form>
-<div className=" flex justify-around align-middle">
-  <h1 className=" h-[2px] my-auto rounded w-[40%] bg-gray-500"/> or<h1 className=" h-[2px] rounded my-auto w-[40%] bg-gray-500"/>
-</div>
+        <div className=" flex justify-around align-middle">
+          <h1 className=" h-[2px] my-auto rounded w-[40%] bg-gray-500" /> or
+          <h1 className=" h-[2px] rounded my-auto w-[40%] bg-gray-500" />
+        </div>
 
         <Link
           to="/register"
