@@ -37,7 +37,7 @@ export const routes = createBrowserRouter([
         path: "/question",
         element: (
           //! is user match his role
-          <Auth roles={["admin"]}>
+          <Auth>
             <QuestionList />
           </Auth>
         ),

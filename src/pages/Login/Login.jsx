@@ -43,17 +43,16 @@ const Login = () => {
     }
   }, [isLogin]);
 
-  const handleLogin = () => {
-    mutation.mutate({
-      email: "admin@admin.site",
-      password: "admin##",
-    });
+  const handleLogin = (values) => {
+    mutation.mutate(values);
   };
 
   return (
     <div className=" bg-[url('/photo/photo2.webp')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
       <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 h-full bg-black bg-opacity-15 rounded-xl ">
-        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">Log In</div>
+        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">
+          Log In
+        </div>
         <Form
           name="register"
           className=" "
@@ -64,7 +63,9 @@ const Login = () => {
         >
           <Form.Item
             name="email"
-            label={<span style={{  fontSize: '16px', color: 'white' }}>E-mail</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>E-mail</span>
+            }
             rules={[
               {
                 type: "email",
@@ -80,7 +81,9 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item
-            label={<span style={{  fontSize: '16px', color: 'white' }}>Password</span>}
+            label={
+              <span style={{ fontSize: "16px", color: "white" }}>Password</span>
+            }
             name="password"
             rules={[
               {
@@ -97,7 +100,11 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button className="btn btn-primary" type="primary" htmlType="submit">
+            <Button
+              className="btn btn-primary"
+              type="primary"
+              htmlType="submit"
+            >
               Submit
             </Button>
           </Form.Item>
@@ -107,7 +114,11 @@ const Login = () => {
           <h1 className=" h-[2px] rounded my-auto w-[40%] bg-gray-500" />
         </div>
         <div className="text-xl mt-0 text-center font-semibold">
-          Don't have an account? <Link to="/register" className=" text-xl text-[#BDE4A7] font-semibold">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className=" text-xl text-[#BDE4A7] font-semibold"
+          >
             Sing Up
           </Link>
         </div>
