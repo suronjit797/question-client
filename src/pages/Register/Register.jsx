@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const createUser = (body) => {
   // console.log(body);
@@ -33,9 +33,9 @@ const Register = () => {
   };
 
   return (
-    <div className=" bg-[url('https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007381.jpg?t=st=1719589659~exp=1719593259~hmac=9f83db871293174a1758ce51e64425e42eb5cc4dab9f7e812a701e077086b506&w=826')] h-screen bg-cover bg-center grid grid-cols-7 min-h-screen text-white p-6 overflow-hidden ">
-      <div className=" col-span-4"></div>
-      <div className=" col-span-3  p-10 bg-black bg-opacity-15 rounded-xl ">
+    <div className=" bg-[url('/photo/photo1.webp')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
+      <div className=" md:col-span-4"></div>
+      <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 md:h-full bg-black bg-opacity-35 rounded-xl ">
         <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">Registration</div>
         <Form        
           className=" text-white"
@@ -46,7 +46,7 @@ const Register = () => {
           layout="vertical"
         >
           <Form.Item
-            label=" Name"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>Name</span>}
             name="name"
             rules={[
               {
@@ -88,7 +88,7 @@ const Register = () => {
 
           <Form.Item
             name="email"
-            label="E-mail"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>E-mail</span>}
             rules={[
               {
                 type: "email",
@@ -104,7 +104,7 @@ const Register = () => {
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>Password</span>}
             name="password"
             rules={[
               {
@@ -122,7 +122,7 @@ const Register = () => {
 
           <Form.Item
             name="confirm"
-            label="Confirm Password"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>Confirm Password</span>}
             dependencies={["password"]}
             rules={[
               {
@@ -148,6 +148,9 @@ const Register = () => {
             </Button>
           </Form.Item>
         </Form>
+        <div className="text-xl text-center font-semibold">
+          Already Registered? <Link to="/register" className=" text-xl text-[#BDE4A7] font-semibold">Sing In</Link>
+        </div>
       </div>
     </div>
   );

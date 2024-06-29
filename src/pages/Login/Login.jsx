@@ -51,13 +51,12 @@ const Login = () => {
   };
 
   return (
-    <div className=" bg-[url('https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826')] h-screen bg-cover bg-center grid grid-cols-7 min-h-screen text-white p-6 overflow-hidden ">
-      <div className=" col-span-3 grid items-center grid-flow-row p-10 bg-black bg-opacity-15 rounded-xl ">
-        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">
-          Log In
-        </div>
+    <div className=" bg-[url('/photo/photo2.webp')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
+      <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 h-full bg-black bg-opacity-15 rounded-xl ">
+        <div className="text-4xl  items-center text-[#BDE4A7] font-semibold text-center mb-4">Log In</div>
         <Form
           name="register"
+          className=" "
           onFinish={handleLogin}
           // onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -65,7 +64,7 @@ const Login = () => {
         >
           <Form.Item
             name="email"
-            label="E-mail"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>E-mail</span>}
             rules={[
               {
                 type: "email",
@@ -77,11 +76,11 @@ const Login = () => {
               },
             ]}
           >
-            <Input placeholder="Input Email" />
+            <Input className="" placeholder="Input Email" />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label={<span style={{  fontSize: '16px', color: 'white' }}>Password</span>}
             name="password"
             rules={[
               {
@@ -98,26 +97,20 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button
-              className="btn btn-primary"
-              type="primary"
-              htmlType="submit"
-            >
+            <Button className="btn btn-primary" type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
         </Form>
-        <div className=" flex justify-around align-middle">
+        <div className=" flex justify-around mt-2 mb-0 align-middle">
           <h1 className=" h-[2px] my-auto rounded w-[40%] bg-gray-500" /> or
           <h1 className=" h-[2px] rounded my-auto w-[40%] bg-gray-500" />
         </div>
-
-        <Link
-          to="/register"
-          className=" w-full py-2 px-5 mx-auto text-xl text-center font-semibold rounded border-[#BDE4A7] border-2  hover:bg-[#BDE4A7] text-[#BDE4A7] hover:text-black space-x-word-10"
-        >
-          Register
-        </Link>
+        <div className="text-xl mt-0 text-center font-semibold">
+          Don't have an account? <Link to="/login" className=" text-xl text-[#BDE4A7] font-semibold">
+            Sing Up
+          </Link>
+        </div>
       </div>
       <div className=" col-span-4"></div>
     </div>
