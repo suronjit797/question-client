@@ -5,7 +5,15 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.questionFrom .imageOption .ant-row.ant-form-item-row {
+  align-items: center !important;
 }
