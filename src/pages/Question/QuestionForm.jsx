@@ -43,37 +43,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
   const handleFinish = async (values) => {
     console.log("Form Values:", values);
-
-    return;
-    const formData = new FormData();
-
-    // Append simple fields to formData
-    formData.append("type", values.type);
-    formData.append("question[text]", values.question);
-    formData.append("answerIndex", values.answerIndex);
-    formData.append("answerText", values.answerText);
-    formData.append("uploader", values.uploader);
-    formData.append("subject", values.subject);
-    formData.append("paper", values.paper);
-    formData.append("topics", values.topics);
-    formData.append("institution", values.institution);
-    formData.append("year", values.year);
-    formData.append("difficulty", values.difficulty);
-    formData.append("options", values.options);
-    formData.append("tags", values.tags);
-
-    values.questionImage?.forEach((file, index) => {
-      formData.append(`questionImage`, file.originFileObj);
-    });
-    values.solutionsImage?.forEach((file, index) => {
-      formData.append(`solutionsImage`, file.originFileObj);
-    });
-
-    try {
-      mutate(formData);
-    } catch (error) {
-      console.log(error);
-    }
+    
   };
 
   const normFile = (e) => {
