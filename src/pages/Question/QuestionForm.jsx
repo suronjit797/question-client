@@ -62,7 +62,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   // state
   const [formData, setFormData] = useState(initData);
   const [chapterOptions, setChapterOptions] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // state destructure
   const { type, solutionsImage, questionImage, subject, paper, optionType } = formData;
