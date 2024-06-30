@@ -1,7 +1,10 @@
-import { Button } from "antd";
+import DesktopNav from "./DesktopNav";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setAuth } from "../../redux/features/authSlice";
+import { Button } from "antd";
+import { IoMdLogOut } from "react-icons/io";
+import MobileNav from "./MobileNav";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,31 +17,43 @@ const Header = () => {
     navigate("/login");
   };
   return (
-    <div className=" bg-blue-300 py-3 capitalize">
-      <div className="container flex items-center  mx-auto">
-        <div className="me-3">
-          <Link to="/"> home </Link>
+    <header className=" bg-[#254336]  py-4 px-2 xl:py-5  md:py-5 capitalize">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/">
+          <h1 className="text-4xl font-semibold text-white">
+            Logo <span className=" text-[#DAD3BE]">.</span>
+          </h1>
+        </Link>
+        {/* Desktop nav */}
+        <div className=" hidden md:flex items-center gap-8">
+          <DesktopNav />
         </div>
-        <div className="me-3">
-          <Link to="/question"> question </Link>
+
+        {/* auth section */}
+        <div>
+          <div className="hidden md:flex items-center ">
+            {isLogin ? (
+              <span className="mx-4 flex flex-col justify-start">
+                <span className=" text-[12px] text-accent-hover">{user.role}</span>
+                <div>
+                  <IoMdLogOut onClick={handleLogout} className=" text-4xl font-semibold text-accent" />
+                </div>
+              </span>
+            ) : (
+              <>
+                <Link to="/login"> login </Link>
+                <Link to="/register"> register </Link>
+              </>
+            )}
+          </div>
         </div>
-        <div className="ms-auto">
-          {isLogin ? (
-            <span className="mx-4">
-              <span className="mx-4">{user.role}</span>
-              <Button type="primary" danger onClick={handleLogout}>
-                Logout
-              </Button>
-            </span>
-          ) : (
-            <>
-              <Link to="/login"> login </Link>
-              <Link to="/register"> register </Link>
-            </>
-          )}
+        {/* mobile nav */}
+        <div className="md:hidden">
+          <MobileNav />
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
