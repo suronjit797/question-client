@@ -3,24 +3,30 @@ import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input, InputNumber, Select, Space, Switch, Upload } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-const { Option } = Select;
+import QuestionPreviewModal from "./QuestionPreviewModal";
 
 const initData = {
   type: "mcq",
-  question: "asasd",
-  options: ["a", "v", "b", "s", "d"],
-  answerIndex: 3,
+  question: "Which one aa?",
+  answerIndex: "option1",
   answerText: "a",
   uploader: "667ff284c9191d4994ff7275",
   subject: "math",
   paper: "first",
   chapter: "algebra",
   topics: "667ff284c9191d4994ff7275",
-  tags: ["a"],
+  tags: ["a", "b", "c", "d", "e", "f", "g", "h"],
   institution: "a",
   year: "333",
   difficulty: "medium",
-  institutions: [{ name: "", year: null }],
+  option1: "aa",
+  option2: "bb",
+  option3: "cc",
+  option4: "dd",
+  institutions: [
+    { name: "RU", year: 2000 },
+    { name: "DU", year: 2001 },
+  ],
 };
 
 const allChapters = [
@@ -56,6 +62,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   // state
   const [formData, setFormData] = useState(initData);
   const [chapterOptions, setChapterOptions] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   // state destructure
   const { type, solutionsImage, questionImage, subject, paper, optionType } = formData;
@@ -70,6 +77,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
   const handleFinish = async (values) => {
     console.log("Form Values:", values);
+    setIsModalOpen(true);
 
     // return;
     // const formData = new FormData();
@@ -110,16 +118,32 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     return e?.fileList;
   };
 
+  const handlerValueChange = (item, all) => {
+    if (Object.keys(item)[0] === "optionType") {
+      form.setFieldsValue({
+        option1: undefined,
+        option2: undefined,
+        option3: undefined,
+        option4: undefined,
+      });
+      setFormData({ ...all, option1: undefined, option2: undefined, option3: undefined, option4: undefined });
+    } else {
+      setFormData(all);
+    }
+  };
+
   return (
     <div className="container p-11 my-auto">
-      <div className="max-w-[450px] mx-auto">
+      <div className="max-w-[450px] mx-auto questionFrom">
         <Form
           form={form}
+          name="createQuestion"
           onFinish={handleFinish}
           onFinishFailed={finishFailed}
           layout="vertical"
           initialValues={initData}
-          onValuesChange={(_, all) => setFormData(all)}
+          onValuesChange={handlerValueChange}
+          scrollToFirstError={true}
         >
           {/* <div className="grid grid-cols-2 gap-6"> */}
           <div>
@@ -129,7 +153,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please select the subject",
+                  message: "Select the subject",
                 },
               ]}
             >
@@ -148,7 +172,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please select the paper",
+                  message: "Select the paper",
                 },
               ]}
             >
@@ -167,14 +191,14 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please select the chapter",
+                  message: "Select the chapter",
                 },
               ]}
             >
               <Select placeholder="Select Chapter" options={chapterOptions} />
             </Form.Item>
 
-            <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Please input the topics" }]}>
+            <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
               <Input />
             </Form.Item>
 
@@ -184,7 +208,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please input the type",
+                  message: "Input the type",
                 },
               ]}
             >
@@ -200,9 +224,9 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             <Form.Item
               name="question"
               label="Question Text"
-              rules={[{ required: true, message: "Please input the question text" }]}
+              rules={[{ required: true, message: "Input the question text" }]}
             >
-              <Input placeholder="Enter Question Text" />
+              <Input.TextArea rows={4} placeholder="Enter Question Text" />
             </Form.Item>
 
             <Form.Item
@@ -231,20 +255,26 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                         key={item}
                         name={`option${item}`}
                         label={`Option ${item}`}
-                        rules={[{ required: true, message: `Please input the option ${item}` }]}
+                        rules={[{ required: true, message: `Input the option ${item}` }]}
                         getValueFromEvent={normFile}
                         layout="horizontal"
+                        className="imageOption"
                       >
                         <Upload
-                          name="questionImage"
+                          name={`option${item}`}
                           listType="picture"
                           beforeUpload={() => false}
-                          maxCount={5}
+                          maxCount={1}
                           multiple={false}
                         >
-                          <Button disabled={questionImage?.length >= 5} icon={<UploadOutlined />}>
+                          {/* <Button disabled={formData[`option${item}`]?.length >= 1} icon={<UploadOutlined />}>
                             Upload
-                          </Button>
+                          </Button> */}
+                          {formData[`option${item}`]?.length >= 1 ? (
+                            ""
+                          ) : (
+                            <Button icon={<UploadOutlined />}>Upload</Button>
+                          )}
                         </Upload>
                       </Form.Item>
                     ))}
@@ -256,7 +286,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                         key={item}
                         name={`option${item}`}
                         label={`Option ${item}`}
-                        rules={[{ required: true, message: `Please input the option ${item}` }]}
+                        rules={[{ required: true, message: `Input the option ${item}` }]}
                       >
                         <Input placeholder={`Enter option ${item}`} />
                       </Form.Item>
@@ -266,12 +296,17 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 <Form.Item
                   name="answerIndex"
                   label="Answer Index"
-                  rules={[{ required: true, message: "Please input the answer index" }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Input th  const [isModalOpen, setIsModalOpen] = useState(false);e answer index",
+                    },
+                  ]}
                 >
                   {/* <Input type="number" /> */}
                   <Select
                     placeholder="Select answer index"
-                    options={[1, 2, 3, 4].map((item) => ({ label: `Option ${item}`, value: item }))}
+                    options={[1, 2, 3, 4].map((item) => ({ label: `Option ${item}`, value: `option${item}` }))}
                   />
                 </Form.Item>
 
@@ -281,7 +316,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   rules={[
                     {
                       required: true,
-                      message: "Please input the options",
+                      message: "Input the options",
                       type: "array",
                     },
                   ]}
@@ -291,7 +326,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 <Form.Item
                   name="answerIndex"
                   label="Answer Index"
-                  rules={[{ required: true, message: "Please input the answer index" }]}
+                  rules={[{ required: true, message: "Input the answer index" }]}
                 >
                   <Input type="number" />
                 </Form.Item> */}
@@ -301,7 +336,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 <Form.Item
                   name="answerText"
                   label="Answer Text"
-                  rules={[{ required: true, message: "Please input the answer text" }]}
+                  rules={[{ required: true, message: "Input the answer text" }]}
                 >
                   <Input placeholder="Enter Answer Text" />
                 </Form.Item>
@@ -314,7 +349,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please input the tags",
+                  message: "Input the tags",
                 },
               ]}
             >
@@ -324,7 +359,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             <Form.Item
               name="institution"
               label="Institution"
-              rules={[{ required: true, message: "Please input the institution" }]}
+              rules={[{ required: true, message: "Input the institution" }]}
             >
               <Input />
             </Form.Item>
@@ -342,7 +377,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                         <Form.Item
                           {...restField}
                           name={[name, "name"]}
-                          rules={[{ required: true, message: "Please input the institution name" }]}
+                          rules={[{ required: true, message: "Input the institution name" }]}
                         >
                           <Input placeholder="Institution Name" />
                         </Form.Item>
@@ -350,9 +385,9 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                       <Form.Item
                         {...restField}
                         name={[name, "year"]}
-                        rules={[{ required: true, message: "Please input the year" }]}
+                        rules={[{ required: true, message: "Input the year" }]}
                       >
-                        <InputNumber placeholder="Year" min={1900} max={2100} />
+                        <InputNumber controls={false} placeholder="Year" min={1900} max={2100} />
                       </Form.Item>
                       {fields.length > 1 && <MinusCircleOutlined onClick={() => remove(name)} />}
                     </div>
@@ -369,7 +404,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             <Form.Item
               name="difficulty"
               label="Difficulty"
-              rules={[{ required: true, message: "Please select the difficulty" }]}
+              rules={[{ required: true, message: "Select the difficulty" }]}
             >
               <Select
                 placeholder="Select difficulty"
@@ -401,6 +436,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
           </Form.Item>
         </Form>
       </div>
+      {isModalOpen && <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: formData }} />}
     </div>
   );
 };
