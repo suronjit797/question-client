@@ -22,14 +22,17 @@ const initData = {
   // solutions: [
   //   "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
   // ],
-  solutions: [
-    {
-      uid: "uid",
-      name: "xx.png",
-      thumbUrl:
-        "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
-    },
-  ],
+  solution: {
+    text: "solution",
+    images: [
+      {
+        uid: "uid",
+        name: "xx.png",
+        thumbUrl:
+          "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
+      },
+    ],
+  },
   answerIndex: "option1",
   answerText: "a",
   uploader: "667ff284c9191d4994ff7275",
@@ -90,7 +93,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // state destructure
-  const { type, solutionsImage, questionImage, subject, paper, optionType } = formData;
+  const { type, solutionsImage, subject, paper, optionType, question, solution } = formData;
 
   // effect
   useEffect(() => {
@@ -102,7 +105,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
   const handleFinish = async (values) => {
     console.log("Form Values:", values);
-    // const { option1, option2, option3, option4, question, questionImage } = values;
 
     setIsModalOpen(true);
 
@@ -124,12 +126,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     // formData.append("options", values.options);
     // formData.append("tags", values.tags);
 
-    // values.questionImage?.forEach((file, index) => {
-    //   formData.append(`questionImage`, file.originFileObj);
-    // });
-    // values.solutionsImage?.forEach((file, index) => {
-    //   formData.append(`solutionsImage`, file.originFileObj);
-    // });
 
     // try {
     //   mutate(formData);
@@ -263,14 +259,13 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
             <Form.Item
               name={["question", "images"]}
-              // name="questionImage"
               label="Question Image"
               valuePropName="fileList"
               getValueFromEvent={normFile}
               layout="horizontal"
             >
-              <Upload name="questionImage" listType="picture" beforeUpload={() => false} maxCount={5}>
-                <Button disabled={questionImage?.length >= 5} icon={<UploadOutlined />}>
+              <Upload listType="picture" beforeUpload={() => false} maxCount={5}>
+                <Button disabled={question?.image?.length >= 5} icon={<UploadOutlined />}>
                   Upload
                 </Button>
               </Upload>
