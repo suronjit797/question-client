@@ -7,7 +7,11 @@ import QuestionPreviewModal from "./QuestionPreviewModal";
 
 const initData = {
   type: "mcq",
-  question: "Which one aa?",
+  question: {
+    text: "Which one aa?",
+    images: ["http://localhost:5000/uploads/images/1719680816333-Screenshot_from_2024-06-29_15-43-04.png"], //! take an image url
+  },
+  solutions: ["http://localhost:5000/uploads/images/1719680816333-Screenshot_from_2024-06-29_15-43-04.png"], //! take an image url
   answerIndex: "option1",
   answerText: "a",
   uploader: "667ff284c9191d4994ff7275",
@@ -19,10 +23,13 @@ const initData = {
   institution: "a",
   year: "333",
   difficulty: "medium",
-  option1: "aa",
-  option2: "bb",
-  option3: "cc",
-  option4: "dd",
+  options: {
+    // option1: "http://localhost:5000/uploads/images/1719680816333-Screenshot_from_2024-06-29_15-43-04.png",
+    option1: "aa",
+    option2: "bb",
+    option3: "cc",
+    option4: "dd",
+  },
   institutions: [
     { name: "RU", year: 2000 },
     { name: "DU", year: 2001 },
@@ -77,6 +84,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
   const handleFinish = async (values) => {
     console.log("Form Values:", values);
+    // const { option1, option2, option3, option4, question, questionImage } = values;
+
     setIsModalOpen(true);
 
     // return;
@@ -118,15 +127,19 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     return e?.fileList;
   };
 
+  const normSingleFile = (e) => {
+    console.log(e);
+    if (Array.isArray(e)) {
+      return e[0];
+    }
+    return e?.fileList[0];
+  };
+
   const handlerValueChange = (item, all) => {
     if (Object.keys(item)[0] === "optionType") {
-      form.setFieldsValue({
-        option1: undefined,
-        option2: undefined,
-        option3: undefined,
-        option4: undefined,
-      });
-      setFormData({ ...all, option1: undefined, option2: undefined, option3: undefined, option4: undefined });
+      const opt = { option1: undefined, option2: undefined, option3: undefined, option4: undefined };
+      form.setFieldsValue({ options: opt });
+      setFormData({ ...all, options: opt });
     } else {
       setFormData(all);
     }
@@ -222,7 +235,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             </Form.Item>
 
             <Form.Item
-              name="question"
+              name={["question", "text"]}
+              // name="question"
               label="Question Text"
               rules={[{ required: true, message: "Input the question text" }]}
             >
@@ -230,7 +244,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             </Form.Item>
 
             <Form.Item
-              name="questionImage"
+              name={["question", "images"]}
+              // name="questionImage"
               label="Question Image"
               valuePropName="fileList"
               getValueFromEvent={normFile}
@@ -253,24 +268,17 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                     {[1, 2, 3, 4].map((item) => (
                       <Form.Item
                         key={item}
-                        name={`option${item}`}
+                        // name={`option${item}`}
+                        name={["options", `option${item}`]}
                         label={`Option ${item}`}
                         rules={[{ required: true, message: `Input the option ${item}` }]}
-                        getValueFromEvent={normFile}
+                        // getValueFromEvent={normFile}
+                        getValueFromEvent={normSingleFile}
                         layout="horizontal"
                         className="imageOption"
                       >
-                        <Upload
-                          name={`option${item}`}
-                          listType="picture"
-                          beforeUpload={() => false}
-                          maxCount={1}
-                          multiple={false}
-                        >
-                          {/* <Button disabled={formData[`option${item}`]?.length >= 1} icon={<UploadOutlined />}>
-                            Upload
-                          </Button> */}
-                          {formData[`option${item}`]?.length >= 1 ? (
+                        <Upload listType="picture" beforeUpload={() => false} maxCount={1} multiple={false}>
+                          {formData.options && formData.options[`option${item}`] ? (
                             ""
                           ) : (
                             <Button icon={<UploadOutlined />}>Upload</Button>
@@ -284,7 +292,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                     {[1, 2, 3, 4].map((item) => (
                       <Form.Item
                         key={item}
-                        name={`option${item}`}
+                        // name={`option${item}`}
+                        name={["options", `option${item}`]}
                         label={`Option ${item}`}
                         rules={[{ required: true, message: `Input the option ${item}` }]}
                       >
@@ -299,7 +308,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   rules={[
                     {
                       required: true,
-                      message: "Input th  const [isModalOpen, setIsModalOpen] = useState(false);e answer index",
+                      message: "Input the answer index",
                     },
                   ]}
                 >
@@ -416,7 +425,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             </Form.Item>
 
             <Form.Item
-              name="solutionsImage"
+              name="solutions"
               label="Solutions Image"
               valuePropName="fileList"
               getValueFromEvent={normFile}

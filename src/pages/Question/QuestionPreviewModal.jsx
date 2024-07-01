@@ -8,6 +8,15 @@ const optionNumber = {
   option4: "d",
 };
 
+const isValidUrl = (string) => {
+  try {
+    new URL(string);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
   const handleClose = () => {
     setIsModalOpen(false);
@@ -20,10 +29,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
     topics,
     type,
     question,
-    option1,
-    option2,
-    option3,
-    option4,
+    options,
     answerIndex,
     optionType,
     tags,
@@ -31,6 +37,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
     difficulty,
     answerText,
   } = data;
+  const optionsItems = Object.keys(options);
   return (
     <>
       <Modal title="Preview" open={isModalOpen} onOk={handleClose} onCancel={handleClose}>
@@ -57,60 +64,44 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
             </div>
           </div>
           <hr className="my-3" />
-          <div className="font-bold">{question}</div>
+          <div className="mb-2">
+            <div className="font-bold">{question?.text}</div>
+            {/* <div>
+              {typeof questionImage === "string" ? (
+                <img src={questionImage} alt="question image" />
+              ) : (
+                <img src={questionImage[0].thumbUrl} alt={questionImage[0].uid} />
+              )}
+            </div> */}
+          </div>
           {type === "mcq" ? (
             <div className="grid grid-cols-2 gap-5">
-              <div className="flex items-center gap-2">
-                <div>a.</div>
-                {optionType && Array.isArray(option1) ? (
-                  <div>
-                    {" "}
-                    <img src={option1[0].thumbUrl} alt={option1[0].uid} />
+              {Array.isArray(optionsItems) &&
+                optionsItems?.map((item, key) => (
+                  <div key={key}>
+                    <div className="flex items-center gap-4">
+                      <div> {optionNumber[item]}. </div>
+                      {typeof options[item] === "string" && isValidUrl(options[item]) ? (
+                        <img src={options[item]} alt={item} />
+                      ) : (
+                        <div>
+                          {typeof options[item] === "string" ? (
+                            <div> {options[item]} </div>
+                          ) : (
+                            <img src={options[item]?.thumbUrl} alt={options[item]?.uid} />
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  <div> {option1} </div>
-                )}{" "}
-              </div>
-              <div className="flex items-center gap-2">
-                <div>b.</div>
-                {optionType && Array.isArray(option2) ? (
-                  <div>
-                    {" "}
-                    <img src={option2[0].thumbUrl} alt={option2[0].uid} />
-                  </div>
-                ) : (
-                  <div> {option2} </div>
-                )}{" "}
-              </div>
-              <div className="flex items-center gap-2">
-                <div>c.</div>
-                {optionType && Array.isArray(option3) ? (
-                  <div>
-                    {" "}
-                    <img src={option3[0].thumbUrl} alt={option3[0].uid} />
-                  </div>
-                ) : (
-                  <div> {option3} </div>
-                )}{" "}
-              </div>
-              <div className="flex items-center gap-2">
-                <div>d.</div>
-                {optionType && Array.isArray(option4) ? (
-                  <div>
-                    {" "}
-                    <img src={option4[0].thumbUrl} alt={option4[0].uid} />
-                  </div>
-                ) : (
-                  <div> {option4} </div>
-                )}{" "}
-              </div>
+                ))}
             </div>
           ) : (
             <></>
           )}
           <hr className="my-3" />
           <div>
-            <span className="font-bold">Answer:</span>{" "}
+            <span className="font-bold">Answer:</span>
             {type === "mcq" ? (
               <span>
                 {optionType ? optionNumber[answerIndex] : `${optionNumber[answerIndex]}. ${data[answerIndex]}`}
@@ -123,7 +114,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
             <span className="font-bold">Difficulty:</span> {difficulty}
           </div>
           <div>
-            <span className="font-bold">Tags:</span>{" "}
+            <span className="font-bold">Tags:</span>
             {Array.isArray(tags) &&
               tags?.map((tag, ind) => (
                 <Tag color="geekblue" key={ind}>
