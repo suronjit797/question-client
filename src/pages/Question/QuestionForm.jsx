@@ -10,9 +10,26 @@ const initData = {
   type: "mcq",
   question: {
     text: "Which one aa?",
-    images: ["https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826"], //! take an image url
+    images: [
+      {
+        uid: "uid",
+        name: "xx.png",
+        thumbUrl:
+          "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
+      },
+    ],
   },
-  solutions: ["https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826"], //! take an image url
+  // solutions: [
+  //   "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
+  // ],
+  solutions: [
+    {
+      uid: "uid",
+      name: "xx.png",
+      thumbUrl:
+        "https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826",
+    },
+  ],
   answerIndex: "option1",
   answerText: "a",
   uploader: "667ff284c9191d4994ff7275",
@@ -451,11 +468,9 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   );
 };
 
-
 QuestionForm.propTypes = {
-  isModalOpen: PropTypes.bool.isRequired,
-  setIsModalOpen: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
+  mode: PropTypes.string,
+  data: PropTypes.object,
 };
 
 export default QuestionForm;
