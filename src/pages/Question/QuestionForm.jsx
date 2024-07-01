@@ -1,17 +1,18 @@
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { Button, Form, Input, InputNumber, Select, Space, Switch, Upload } from "antd";
+import { Button, Form, Input, InputNumber, Select, Switch, Upload } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
+import PropTypes from "prop-types";
 
 const initData = {
   type: "mcq",
   question: {
     text: "Which one aa?",
-    images: ["http://localhost:5000/uploads/images/1719680816333-Screenshot_from_2024-06-29_15-43-04.png"], //! take an image url
+    images: ["https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826"], //! take an image url
   },
-  solutions: ["http://localhost:5000/uploads/images/1719680816333-Screenshot_from_2024-06-29_15-43-04.png"], //! take an image url
+  solutions: ["https://img.freepik.com/free-photo/international-day-education-cartoon-style_23-2151007392.jpg?t=st=1719590954~exp=1719594554~hmac=aa679c72e2073faee48ca676f6e292e86a109a464ec63264f0b7ac35d77719fe&w=826"], //! take an image url
   answerIndex: "option1",
   answerText: "a",
   uploader: "667ff284c9191d4994ff7275",
@@ -448,6 +449,13 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
       {isModalOpen && <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: formData }} />}
     </div>
   );
+};
+
+
+QuestionForm.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export default QuestionForm;
