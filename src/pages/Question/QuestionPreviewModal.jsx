@@ -1,4 +1,4 @@
-import { Button, Modal, Tag } from "antd";
+import {  Modal, Tag } from "antd";
 import PropTypes from "prop-types";
 
 const optionNumber = {
@@ -65,7 +65,20 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
           </div>
           <hr className="my-3" />
           <div className="mb-2">
-            <div className="font-bold">{question?.text}</div>
+            {/* question image */}
+            <div className=" my-3">
+              {/* <h2 className="font-bold my-2">Question Image:</h2> */}
+              <div className="flex gap-2 w-auto h-auto">
+                {question?.images?.map((item, index) => {
+                  return (
+                    <div key={index} className=" m-auto">
+                      <img src={item.thumbUrl ? item.thumbUrl : item} alt="Question Photo" className="w-1/5" />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="font-bold">{question?.text}</div>
+            </div>
             {/* <div>
               {typeof questionImage === "string" ? (
                 <img src={questionImage} alt="question image" />
@@ -104,7 +117,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
             <span className="font-bold">Answer:</span>
             {type === "mcq" ? (
               <span>
-                {optionType ? optionNumber[answerIndex] : `${optionNumber[answerIndex]}. ${data[answerIndex]}`}
+                {optionType ? optionNumber[answerIndex] : `${optionNumber[answerIndex]}. ${data.options[answerIndex]}`}
               </span>
             ) : (
               <span>{answerText}</span>
@@ -121,6 +134,19 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
                   {tag}
                 </Tag>
               ))}
+          </div>
+          <hr className="my-3" />
+          <div>
+            <h2 className="font-bold mb-2">Question Image:</h2>
+            <div className="flex gap-2 w-auto h-auto">
+                {question?.images?.map((item, index) => {
+                  return (
+                    <div key={index} className=" m-auto">
+                      <img src={item.thumbUrl ? item.thumbUrl : item} alt="Question Photo" className="w-1/5" />
+                    </div>
+                  );
+                })}
+              </div>
           </div>
         </div>
       </Modal>
