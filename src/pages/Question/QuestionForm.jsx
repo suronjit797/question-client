@@ -6,6 +6,24 @@ import { useEffect, useState } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 import PropTypes from "prop-types";
 
+const yearOptions = [];
+for (let i = 1990; i <= new Date().getFullYear(); i++) {
+  yearOptions.push(
+    { label: i + "", value: i }
+    // <Select.Option key={i} value={i}>
+    //   {i}
+    // </Select.Option>
+  );
+}
+for (let i = 1990; i <= new Date().getFullYear(); i++) {
+  yearOptions.push(
+    { label: `${i - 1}-${i}`, value: `${i - 1} - ${i}` }
+    // <Select.Option key={i} value={i}>
+    //   {i}
+    // </Select.Option>
+  );
+}
+
 const initData = {
   type: "mcq",
   question: {
@@ -126,7 +144,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     // formData.append("options", values.options);
     // formData.append("tags", values.tags);
 
-
     // try {
     //   mutate(formData);
     // } catch (error) {
@@ -186,6 +203,10 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select Subject"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                }
+                showSearch={true}
                 options={["physics", "chemistry", "math"].map((item) => ({
                   label: <span className="capitalize">{item}</span>,
                   value: item,
@@ -205,6 +226,10 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select Paper"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                }
+                showSearch={true}
                 options={["first", "second"].map((item) => ({
                   label: <span className="capitalize">{item}</span>,
                   value: item,
@@ -222,7 +247,12 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 },
               ]}
             >
-              <Select placeholder="Select Chapter" options={chapterOptions} />
+              <Select
+                placeholder="Select Chapter"
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                showSearch={true}
+                options={chapterOptions}
+              />
             </Form.Item>
 
             <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
@@ -241,6 +271,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Add options"
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                showSearch={true}
                 options={[
                   { label: "MCQ", value: "mcq" },
                   { label: "Written", value: "written" },
@@ -265,7 +297,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               layout="horizontal"
             >
               <Upload listType="picture" beforeUpload={() => false} maxCount={5}>
-                <Button disabled={question?.image?.length >= 5} icon={<UploadOutlined />}>
+                <Button disabled={question?.images?.length >= 5} icon={<UploadOutlined />}>
                   Upload
                 </Button>
               </Upload>
@@ -328,6 +360,8 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   {/* <Input type="number" /> */}
                   <Select
                     placeholder="Select answer index"
+                    filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                    showSearch={true}
                     options={[1, 2, 3, 4].map((item) => ({ label: `Option ${item}`, value: `option${item}` }))}
                   />
                 </Form.Item>
@@ -390,6 +424,21 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               <Input type="number" />
             </Form.Item> */}
 
+            {/* institutions name */}
+            {/* <Form.Item
+              name="institutions"
+              label="Institutions"
+              rules={[{ required: true, message: "Select the difficulty" }]}
+            >
+              <Select
+                placeholder="Select difficulty"
+                options={["DU", "RU", "BSMRSTU"].map((item) => ({
+                  label: <span className="capitalize">{item}</span>,
+                  value: item,
+                }))}
+              />
+            </Form.Item> */}
+
             <Form.List name="institutions">
               {(fields, { add, remove }) => (
                 <>
@@ -399,18 +448,42 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                         <Form.Item
                           {...restField}
                           name={[name, "name"]}
-                          rules={[{ required: true, message: "Input the institution name" }]}
+                          rules={[{ required: true, message: "Select the institution name" }]}
                         >
-                          <Input placeholder="Institution Name" />
+                          <Select
+                            placeholder="Select Institution"
+                            filterOption={(input, option) =>
+                              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                            }
+                            showSearch={true}
+                          >
+                            {/* Add options here */}
+                            <Select.Option value="BSMRSTU">BSMRSTU</Select.Option>
+                            <Select.Option value="DU">DU</Select.Option>
+                            <Select.Option value="RU">RU</Select.Option>
+                            {/* Add more options as needed */}
+                          </Select>
                         </Form.Item>
                       </div>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "year"]}
-                        rules={[{ required: true, message: "Input the year" }]}
-                      >
-                        <InputNumber controls={false} placeholder="Year" min={1900} max={2100} />
-                      </Form.Item>
+                      {/*  */}
+
+                      {/*  */}
+                      <div className=" min-w-32">
+                        <Form.Item
+                          {...restField}
+                          name={[name, "year"]}
+                          rules={[{ required: true, message: "Select the year" }]}
+                        >
+                          <Select
+                            placeholder="Year"
+                            options={yearOptions}
+                            filterOption={(input, option) =>
+                              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                            }
+                            showSearch={true}
+                          />
+                        </Form.Item>
+                      </div>
                       {fields.length > 1 && <MinusCircleOutlined onClick={() => remove(name)} />}
                     </div>
                   ))}
@@ -430,6 +503,10 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select difficulty"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                }
+                showSearch={true}
                 options={["easy", "medium", "hard"].map((item) => ({
                   label: <span className="capitalize">{item}</span>,
                   value: item,
@@ -437,7 +514,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               name="solutions"
               label="Solutions Image"
               valuePropName="fileList"
@@ -446,6 +523,27 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Upload name="solutionsImage" listType="picture" beforeUpload={() => false} maxCount={5}>
                 <Button disabled={solutionsImage?.length >= 5} icon={<UploadOutlined />}>
+                  Upload
+                </Button>
+              </Upload>
+            </Form.Item> */}
+            <Form.Item
+              name={["solution", "text"]}
+              label="Solution Text"
+              rules={[{ required: true, message: "Input the solution text" }]}
+            >
+              <Input.TextArea rows={4} placeholder="Enter solution Text" />
+            </Form.Item>
+
+            <Form.Item
+              name={["solution", "images"]}
+              label="Solution Image"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              layout="horizontal"
+            >
+              <Upload listType="picture" beforeUpload={() => false} maxCount={5}>
+                <Button disabled={solution?.images?.length >= 5} icon={<UploadOutlined />}>
                   Upload
                 </Button>
               </Upload>

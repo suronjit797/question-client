@@ -28,7 +28,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
     institutions,
     difficulty,
     answerText,
-    solutions,
+    solution,
   } = data;
   const optionsItems = Object.keys(options);
   return (
@@ -60,12 +60,12 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
           <div className="mb-2">
             {/* question image */}
             <div className=" my-3">
-              {/* <h2 className="font-bold my-2">Question Image:</h2> */}
+              <h2 className="font-bold my-2">Question Image:</h2>
               <div className="flex gap-2 w-auto h-auto">
                 {question?.images?.map((item, index) => {
                   return (
                     <div key={index} className="w-1/5">
-                      <img src={item.thumbUrl ? item.thumbUrl : item} alt="Question Photo" />
+                      <img src={item.thumbUrl} alt="Question Photo" />
                     </div>
                   );
                 })}
@@ -87,17 +87,17 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
                   <div key={key}>
                     <div className="flex items-center gap-4">
                       <div> {optionNumber[item]}. </div>
-                      {typeof options[item] === "string" && isValidUrl(options[item]) ? (
+                      {/* {typeof options[item] === "string" && isValidUrl(options[item]) ? (
                         <img src={options[item]} alt={item} />
                       ) : (
-                        <div>
+                        <div> */}
                           {typeof options[item] === "string" ? (
                             <div> {options[item]} </div>
                           ) : (
                             <img src={options[item]?.thumbUrl} alt={options[item]?.uid} />
                           )}
-                        </div>
-                      )}
+                        {/* </div>
+                      )} */}
                     </div>
                   </div>
                 ))}
@@ -131,11 +131,12 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
           <hr className="my-3" />
           <div>
             <h2 className="font-bold mb-2">Solutions:</h2>
+            <h2 className=" mb-2">{solution.text}</h2>
             <div className="flex gap-2 w-auto h-auto">
-              {solutions?.map((item, index) => {
+              {solution.images?.map((item, index) => {
                 return (
                   <div key={index} className="w-1/5">
-                    <img src={item.thumbUrl ? item.thumbUrl : item} alt="Solution Photo" />
+                    <img src={item.thumbUrl} alt="Solution Photo" />
                   </div>
                 );
               })}
