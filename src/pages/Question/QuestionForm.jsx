@@ -5,21 +5,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 import PropTypes from "prop-types";
-import { allChapters, subjectOption } from "../../utils/SelectOption";
+import { allChapters, institutionOption, subjectOption } from "../../utils/SelectOption";
 
 const yearOptions = [];
 for (let i = 1990; i <= new Date().getFullYear(); i++) {
-  yearOptions.push(
-    { label: i + "", value: i }
-  );
+  yearOptions.push({ label: i + "", value: i });
 }
 for (let i = 1990; i <= new Date().getFullYear(); i++) {
-  yearOptions.push(
-    { label: `${i - 1}-${i}`, value: `${i - 1} - ${i}` }
-    
-  );
+  yearOptions.push({ label: `${i - 1}-${i}`, value: `${i - 1} - ${i}` });
 }
 
+const topicOption = [
+  { label: "azaz", value: "667ff284c9191d4994ff7275" },
+  { label: "azaz1", value: "667ff284c9191d4994ff7276" },
+  { label: "azaz2", value: "667ff284c9191d4994ff7277" },
+];
 const initData = {
   type: "mcq",
   question: {
@@ -70,8 +70,6 @@ const initData = {
     { name: "DU", year: 2001 },
   ],
 };
-
-
 
 const finishFailed = (values) => {
   console.log("error", values);
@@ -188,9 +186,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select Subject"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                }
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                 showSearch={true}
                 options={subjectOption}
               />
@@ -208,9 +204,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select Paper"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                }
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                 showSearch={true}
                 options={["first", "second"].map((item) => ({
                   label: <span className="capitalize">{item}</span>,
@@ -238,7 +232,12 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             </Form.Item>
 
             <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
-              <Input />
+              <Select
+                placeholder="Select Topic"
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                showSearch={true}
+                options={topicOption}
+              ></Select>
             </Form.Item>
 
             <Form.Item
@@ -438,11 +437,12 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                               (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
                             }
                             showSearch={true}
+                            options={institutionOption}
                           >
                             {/* Add options here */}
-                            <Select.Option value="BSMRSTU">BSMRSTU</Select.Option>
+                            {/* <Select.Option value="BSMRSTU">BSMRSTU</Select.Option>
                             <Select.Option value="DU">DU</Select.Option>
-                            <Select.Option value="RU">RU</Select.Option>
+                            <Select.Option value="RU">RU</Select.Option> */}
                             {/* Add more options as needed */}
                           </Select>
                         </Form.Item>
@@ -485,9 +485,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             >
               <Select
                 placeholder="Select difficulty"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                }
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                 showSearch={true}
                 options={["easy", "medium", "hard"].map((item) => ({
                   label: <span className="capitalize">{item}</span>,
