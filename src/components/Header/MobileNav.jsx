@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { setAuth } from "../../redux/features/authSlice";
 import { IoMdLogOut } from "react-icons/io";
+import PropTypes from "prop-types";
 // import { AnimatePresence, motion } from "framer-motion";
 
-const MobileNav = () => {
+const MobileNav = ({ routs = [] }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -24,11 +25,11 @@ const MobileNav = () => {
     console.log("yes");
   };
   return (
-    <nav className=" flex gap-8 z-30  ">
+    <nav className=" flex gap-8  ">
       <div className={`${isActiv ? " block  w-full h-screen absolute right-0 top-0 " : " hidden"}`}>
         <div className=" grid grid-flow-col grid-col-6 ">
-          <div onClick={navMenue} className=" col-span-2 bg-transparent   "></div>
-          <div className=" col-span-4 flex flex-col bg-black bg-opacity-80 h-screen">
+          <div onClick={navMenue} className=" col-span-2 bg-transparent z-50   "></div>
+          <div className=" col-span-4 flex flex-col z-50 bg-black bg-opacity-80 h-screen">
             <div className=" flex justify-between items-center p-5">
               {/* logo */}
               <Link to="/">
@@ -47,56 +48,57 @@ const MobileNav = () => {
 
             {/* menu */}
             <div className=" overflow-y-scroll text-white h-full">
-              <div className=" flex flex-col gap-4 justify-center items-center">
-                <div className="me-3 text-xl">
+              <div className=" ">
+                <div className="flex flex-col gap-4 justify-center items-center me-3 text-xl">
+                  {routs.map((item, index) => {
+                    return (
+                      <NavLink
+                        key={index}
+                        className={({ isActive }) => {
+                          return isActive
+                            ? " text-accent border-b-2 border-accent capitalize"
+                            : "  capitalize font-medium hover:text-accent transition-all";
+                        }}
+                        to={item.path}
+                      >
+                        {item.name}
+                      </NavLink>
+                    );
+                  })}
+                </div>
+                {/* <div className="me-3 text-xl">
                   <NavLink
                     className={({ isActive }) => {
                       return isActive
                         ? " text-accent border-b-2 border-accent capitalize"
                         : "  capitalize font-medium hover:text-accent transition-all";
                     }}
-                    to="/"
+                    to="/topic"
                   >
                     {" "}
-                    home{" "}
+                    topic{" "}
                   </NavLink>
-                </div>
-                <div className="me-3 text-xl">
-                  <NavLink
-                    className={({ isActive }) => {
-                      return isActive
-                        ? " text-accent border-b-2 border-accent capitalize"
-                        : "  capitalize font-medium hover:text-accent transition-all";
-                    }}
-                    to="/question"
-                  >
-                    {" "}
-                    question{" "}
-                  </NavLink>
-                </div>
+                </div> */}
               </div>
             </div>
 
-
             {/* Auth */}
-            
-              <div className=" p-3 w-full bg-primary rounded-s ">
-                {isLogin ? (
-                  <span className=" flex justify-between items-center">
-                    
-                    <span className=" text-[12px] text-accent">{user.role}</span>
-                    <div>
-                      <IoMdLogOut onClick={handleLogout} className=" text-4xl font-semibold text-accent" />
-                    </div>
-                  </span>
-                ) : (
-                  <>
-                    <Link to="/login"> login </Link>
-                    <Link to="/register"> register </Link>
-                  </>
-                )}
-              </div>
-            
+
+            <div className=" p-3 w-full bg-primary rounded-s ">
+              {isLogin ? (
+                <span className=" flex justify-between items-center">
+                  <span className=" text-[12px] text-accent">{user.role}</span>
+                  <div>
+                    <IoMdLogOut onClick={handleLogout} className=" text-4xl font-semibold text-accent" />
+                  </div>
+                </span>
+              ) : (
+                <>
+                  <Link to="/login"> login </Link>
+                  <Link to="/register"> register </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -104,6 +106,9 @@ const MobileNav = () => {
       <CiMenuFries onClick={navMenue} className=" text-[32px] text-accent" />
     </nav>
   );
+};
+MobileNav.propTypes = {
+  routs: PropTypes.array.isRequired,
 };
 
 export default MobileNav;

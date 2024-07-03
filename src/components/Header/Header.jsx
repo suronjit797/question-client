@@ -2,16 +2,33 @@ import DesktopNav from "./DesktopNav";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setAuth } from "../../redux/features/authSlice";
-import { Button } from "antd";
 import { IoMdLogOut } from "react-icons/io";
 import MobileNav from "./MobileNav";
+import userRole, { authAccess } from "../../utils/userRole";
+import { useEffect, useState } from "react";
+
+const generalRouts = [
+  { name: "Home", path: "/" },
+  { name: "Question", path: "/question" },
+];
+const adminRouts = [
+  { name: "Topic", path: "/topic" },
+  { name: "User", path: "/user" },
+];
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, isLogin, user } = useSelector((state) => state.auth);
+  const { isLogin, user } = useSelector((state) => state.auth);
+  const [routs, setRouts] = useState(generalRouts);
+  useEffect(() => {
+    if (authAccess(userRole.admin).includes(user?.role)) {
+      setRouts([...generalRouts, ...adminRouts]);
+    }
+  }, [user?.role]);
 
-  const handleLogout = (e) => {
+  // handle logout
+  const handleLogout = () => {
     dispatch(setAuth({ token: null, user: {} }));
     localStorage.clear();
     navigate("/login");
@@ -27,7 +44,7 @@ const Header = () => {
         </Link>
         {/* Desktop nav */}
         <div className=" hidden md:flex items-center gap-8">
-          <DesktopNav />
+          <DesktopNav routs={routs} />
         </div>
 
         {/* auth section */}
@@ -50,7 +67,7 @@ const Header = () => {
         </div>
         {/* mobile nav */}
         <div className="md:hidden">
-          <MobileNav />
+          <MobileNav routs={routs} />
         </div>
       </div>
     </header>

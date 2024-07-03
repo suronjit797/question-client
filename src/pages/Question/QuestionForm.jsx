@@ -5,22 +5,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 import PropTypes from "prop-types";
+import { allChapters, subjectOption } from "../../utils/SelectOption";
 
 const yearOptions = [];
 for (let i = 1990; i <= new Date().getFullYear(); i++) {
   yearOptions.push(
     { label: i + "", value: i }
-    // <Select.Option key={i} value={i}>
-    //   {i}
-    // </Select.Option>
   );
 }
 for (let i = 1990; i <= new Date().getFullYear(); i++) {
   yearOptions.push(
     { label: `${i - 1}-${i}`, value: `${i - 1} - ${i}` }
-    // <Select.Option key={i} value={i}>
-    //   {i}
-    // </Select.Option>
+    
   );
 }
 
@@ -75,18 +71,7 @@ const initData = {
   ],
 };
 
-const allChapters = [
-  { subject: "physics", paper: "first", chapters: ["kinematics", "dynamics", "thermodynamics"] },
-  { subject: "physics", paper: "second", chapters: ["electromagnetism", "optics", "quantum mechanics"] },
-  { subject: "chemistry", paper: "first", chapters: ["atomic structure", "periodic table", "chemical bonding"] },
-  {
-    subject: "chemistry",
-    paper: "second",
-    chapters: ["organic chemistry", "inorganic chemistry", "physical chemistry"],
-  },
-  { subject: "math", paper: "first", chapters: ["algebra", "calculus", "trigonometry"] },
-  { subject: "math", paper: "second", chapters: ["statistics", "probability", "geometry"] },
-];
+
 
 const finishFailed = (values) => {
   console.log("error", values);
@@ -111,7 +96,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // state destructure
-  const { type, solutionsImage, subject, paper, optionType, question, solution } = formData;
+  const { type, subject, paper, optionType, question, solution } = formData;
 
   // effect
   useEffect(() => {
@@ -207,10 +192,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
                 }
                 showSearch={true}
-                options={["physics", "chemistry", "math"].map((item) => ({
-                  label: <span className="capitalize">{item}</span>,
-                  value: item,
-                }))}
+                options={subjectOption}
               />
             </Form.Item>
 
