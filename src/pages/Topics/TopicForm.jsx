@@ -2,12 +2,7 @@ import { Form, Select, Input, Button } from "antd";
 import { useEffect, useState } from "react";
 import { allChapters, subjectOption } from "../../utils/SelectOption";
 
-const initData = {
-  subject: "",
-  paper: "",
-  chapter: "",
-  topics: "",
-};
+const initData = {};
 
 const TopicForm = () => {
   const [form] = Form.useForm();
@@ -106,8 +101,8 @@ const TopicForm = () => {
               />
             </Form.Item>
 
-            <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
-              <Input />
+            <Form.Item  name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
+              <Input placeholder="Select topic" />
             </Form.Item>
           </div>
           <Form.Item>
