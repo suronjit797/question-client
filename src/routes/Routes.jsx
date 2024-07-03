@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
@@ -9,6 +9,9 @@ import Admin from "../pages/Admin/Admin";
 import QuestionCreate from "../pages/Question/QuestionCreate";
 import QuestionList from "../pages/Question/QuestionList";
 import QuestionUpdate from "../pages/Question/QuestionUpdate";
+import TopicCreate from "../pages/Topics/TopicCreate";
+import TopicList from "../pages/Topics/TopicList";
+import TopicUpdate from "../pages/Topics/TopicUpdate";
 
 export const routes = createBrowserRouter([
   {
@@ -57,6 +60,33 @@ export const routes = createBrowserRouter([
           //! is user match his role
           <Auth roles={["admin"]}>
             <QuestionUpdate />
+          </Auth>
+        ),
+      },
+      {
+        path: "/topic",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <TopicList />
+          </Auth>
+        ),
+      },
+      {
+        path: "/topic/create",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <TopicCreate />
+          </Auth>
+        ),
+      },
+      {
+        path: "/topic/edit/:id",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <TopicUpdate />
           </Auth>
         ),
       },
