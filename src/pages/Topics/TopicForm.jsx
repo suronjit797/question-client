@@ -1,14 +1,20 @@
 import { Form, Select, Input, Button } from "antd";
 import { useEffect, useState } from "react";
 import { allChapters, subjectOption } from "../../utils/SelectOption";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const initData = {};
+const createTopic = (body) => {
+  console.log({ body });
+  return axios.post("/topics", body);
+};
 
 const TopicForm = () => {
   const [form] = Form.useForm();
   const [chapterOptions, setChapterOptions] = useState();
   const [formData, setFormData] = useState(initData);
-
   const { subject, paper } = formData;
 
   useEffect(() => {
@@ -17,8 +23,31 @@ const TopicForm = () => {
       setChapterOptions(chapters.map((c) => ({ label: <span className="capitalize">{c}</span>, value: c })));
     }
   }, [paper, subject]);
-  const handleFinish = (values) => {
+
+  const { mutate, isError, error } = useMutation({
+    mutationKey: "createTopic",
+    mutationFn: createTopic,
+
+  });
+console.log({error})
+  if (isError) {
+     Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.response.data?.message|| "Error Happen"
+    });
+  }
+
+  const handleFinish = async (values) => {
     console.log("Success:", values);
+    const { subject, paper, chapter, topic } = values;
+    const topicBody = {
+      subject,
+      paper,
+      chapter,
+      topic,
+    };
+    mutate(topicBody);
   };
 
   const finishFailed = (errorInfo) => {
@@ -27,6 +56,7 @@ const TopicForm = () => {
 
   const handlerValueChange = (changedValues, allValues) => {
     setFormData(allValues);
+
     console.log("Values changed:", changedValues, allValues);
   };
 
@@ -101,7 +131,7 @@ const TopicForm = () => {
               />
             </Form.Item>
 
-            <Form.Item  name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
+            <Form.Item name="topic" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
               <Input placeholder="Select topic" />
             </Form.Item>
           </div>
