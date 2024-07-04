@@ -1,0 +1,5 @@
+/* math formate */
+.custom_math > div {
+  display: inline-block;
+  margin: 0 5px;
+}

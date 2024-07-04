@@ -1,6 +1,7 @@
 import { Modal, Tag } from "antd";
 import PropTypes from "prop-types";
 import { isValidUrl } from "../../utils/helpers";
+import PrintMath from "../../components/PrintMath/PrintMath";
 
 const optionNumber = {
   option1: "a",
@@ -70,15 +71,10 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
                   );
                 })}
               </div>
-              <div className="font-bold">{question?.text}</div>
+              <div className="font-bold">
+                <PrintMath text={question?.text} />
+              </div>
             </div>
-            {/* <div>
-              {typeof questionImage === "string" ? (
-                <img src={questionImage} alt="question image" />
-              ) : (
-                <img src={questionImage[0].thumbUrl} alt={questionImage[0].uid} />
-              )}
-            </div> */}
           </div>
           {type === "mcq" ? (
             <div className="grid grid-cols-2 gap-5">
@@ -87,16 +83,13 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
                   <div key={key}>
                     <div className="flex items-center gap-4">
                       <div> {optionNumber[item]}. </div>
-                      {/* {typeof options[item] === "string" && isValidUrl(options[item]) ? (
-                        <img src={options[item]} alt={item} />
+
+                      {typeof options[item] === "string" ? (
+                        <PrintMath text={options[item]} />
                       ) : (
-                        <div> */}
-                          {typeof options[item] === "string" ? (
-                            <div> {options[item]} </div>
-                          ) : (
-                            <img src={options[item]?.thumbUrl} alt={options[item]?.uid} />
-                          )}
-                        {/* </div>
+                        <img src={options[item]?.thumbUrl} alt={options[item]?.uid} />
+                      )}
+                      {/* </div>
                       )} */}
                     </div>
                   </div>
@@ -131,7 +124,9 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data }) => {
           <hr className="my-3" />
           <div>
             <h2 className="font-bold mb-2">Solutions:</h2>
-            <h2 className=" mb-2">{solution.text}</h2>
+            <h2 className=" mb-2">
+              <PrintMath text={solution.text} />
+            </h2>
             <div className="flex gap-2 w-auto h-auto">
               {solution.images?.map((item, index) => {
                 return (

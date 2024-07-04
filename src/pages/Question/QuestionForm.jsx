@@ -1,6 +1,6 @@
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { Button, Form, Input, InputNumber, Select, Switch, Upload } from "antd";
+import { Button, Form, Input, Select, Switch, Upload } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
@@ -150,6 +150,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   };
 
   const handlerValueChange = (item, all) => {
+    console.log(item);
     if (Object.keys(item)[0] === "optionType") {
       const opt = { option1: undefined, option2: undefined, option3: undefined, option4: undefined };
       form.setFieldsValue({ options: opt });
@@ -263,11 +264,14 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
 
             <Form.Item
               name={["question", "text"]}
-              // name="question"
               label="Question Text"
               rules={[{ required: true, message: "Input the question text" }]}
             >
-              <Input.TextArea rows={4} placeholder="Enter Question Text" />
+              <Input.TextArea
+                rows={4}
+                onChange={(e) => console.log({ e: String.raw`${e.target.value}` })}
+                placeholder="Enter Question Text"
+              />
             </Form.Item>
 
             <Form.Item
