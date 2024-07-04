@@ -6,16 +6,23 @@ import { useMutation } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 const initData = {};
-const createTopic = (body) => {
+const createTopicFn = (body) => {
   console.log({ body });
   return axios.post("/topics", body);
 };
 
-const TopicForm = () => {
+const TopicForm = ({ mode = "create", data = {} }) => {
   const [form] = Form.useForm();
   const [chapterOptions, setChapterOptions] = useState();
   const [formData, setFormData] = useState(initData);
   const { subject, paper } = formData;
+
+  useEffect(() => {
+    if (mode === "edit" && data) {
+      setFormData(data);
+      form.setFieldsValue(data);
+    }
+  }, [mode, data]);
 
   useEffect(() => {
     if (subject && paper) {
@@ -24,30 +31,31 @@ const TopicForm = () => {
     }
   }, [paper, subject]);
 
-  const { mutate, isError, error } = useMutation({
+  const {
+    mutate: createTopic,
+    isError,
+    error,
+  } = useMutation({
     mutationKey: "createTopic",
-    mutationFn: createTopic,
-
+    mutationFn: createTopicFn,
   });
-console.log({error})
+  console.log({ error });
   if (isError) {
-     Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: error.response.data?.message|| "Error Happen"
+      text: error.response.data?.message || "Error Happen",
     });
   }
 
   const handleFinish = async (values) => {
     console.log("Success:", values);
-    const { subject, paper, chapter, topic } = values;
-    const topicBody = {
-      subject,
-      paper,
-      chapter,
-      topic,
-    };
-    mutate(topicBody);
+    if (mode === "create") {
+      createTopic(values);
+    } else {
+      // ! update
+      createTopic(values);
+    }
   };
 
   const finishFailed = (errorInfo) => {

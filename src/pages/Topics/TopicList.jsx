@@ -2,16 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { Spin, Table } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import userRole, { authAccess } from "../../utils/userRole";
 import { useEffect, useState } from "react";
 
-
 const initialColumns = [
   {
     title: "No.",
-    render:(text, record, index)=>index+1
+    render: (text, record, index) => index + 1,
   },
   {
     title: "Topic",
@@ -37,17 +36,17 @@ const initialColumns = [
 
 const getTopic = async () => {
   const { data } = await axios.get("/topics?");
-  const topicData= data.data
+  const topicData = data.data;
   return topicData;
 };
 
 const TopicList = () => {
- const [columns, setColumns]= useState(initialColumns)
+  const navigate = useNavigate()
+  const [columns, setColumns] = useState(initialColumns);
   const { token, isLogin, user } = useSelector((state) => state.auth);
 
-
-  const { data, isError, error, isFetching} = useQuery({
-    queryKey: "topic",
+  const { data, isError, error, isFetching } = useQuery({
+    queryKey: ["topic"],
     queryFn: getTopic,
     // staleTime: 5000,
   });
@@ -55,35 +54,51 @@ const TopicList = () => {
   console.log(data);
   if (isError) {
     Swal.fire({
-     icon: "error",
-     title: "Oops...",
-     text: error.response.data?.message|| "Error Happen"
-   });
- }
-  
-  const actionColumn = [{title:"Action", render:(text, record)=> <>
-  <div>edit</div>
-  <div>delete</div>
-  </>}]
-useEffect(()=>{
-  if(isLogin && authAccess(userRole.admin).includes(user?.role)){
-    setColumns([...initialColumns, ...actionColumn])
-   }
-}, [user.role])
+      icon: "error",
+      title: "Oops...",
+      text: error.response.data?.message || "Error Happen",
+    });
+  }
+
+const editHandler=(record)=>{
+console.log(record)
+navigate(`/topic/edit/${record._id}`)
+}
+
+const deleteHandler=()=>{
+
+}
+
+  const actionColumn = [
+    {
+      title: "Action",
+      render: (text, record) => (
+        <>
+          <div onClick={()=>editHandler(record)}>edit</div>
+          <div onClick={deleteHandler}>delete</div>
+        </>
+      ),
+    },
+  ];
+  useEffect(() => {
+    if (isLogin && authAccess(userRole.admin).includes(user?.role)) {
+      setColumns([...initialColumns, ...actionColumn]);
+    }
+  }, [user.role]);
 
   return (
     <Spin spinning={isFetching}>
       <div className="container mx-auto">
-      <div className="flex items-center my-4">
-        <h1 className="  items-center ">Topic List</h1>
-        <Link to="create" className="ms-auto mr-3 p-2 md:p-3 rounded  bg-primary text-accent hover:text-accent-hover">
-          <button className=" font-semibold"> Create Topic </button>
-        </Link>
+        <div className="flex items-center my-4">
+          <h1 className="  items-center ">Topic List</h1>
+          <Link to="create" className="ms-auto mr-3 p-2 md:p-3 rounded  bg-primary text-accent hover:text-accent-hover">
+            <button className=" font-semibold"> Create Topic </button>
+          </Link>
+        </div>
+        <div>
+          <Table dataSource={data} columns={columns} />;
+        </div>
       </div>
-      <div>
-        <Table dataSource={data} columns={columns} />;
-      </div>
-    </div>
     </Spin>
   );
 };
