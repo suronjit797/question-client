@@ -15,7 +15,7 @@ export const subjectOption = ["physics", "chemistry", "math"].map((item) => ({
   label: <span className="capitalize">{item}</span>,
   value: item,
 }));
-export const institutionOption = ["DU", "RU", "BSMRSTU","CU"].map((item) => ({
+export const institutionOption = ["DU", "RU", "BSMRSTU", "CU"].map((item) => ({
   label: <span className="capitalize">{item}</span>,
   value: item,
 }));
