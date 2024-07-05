@@ -27,7 +27,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   const inputRef = useRef(null);
 
   const {
-    data: topicData,
+    data: topics,
     isError: isTopicError,
     error: topicError,
     isFetching: isTopicFetching,
@@ -35,7 +35,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     queryKey: ["topic"],
     queryFn: getAllTopicFn,
   });
-
+  const topicData = topics?.data || []
   // state
   const [formData, setFormData] = useState(initData);
   const [chapterOptions, setChapterOptions] = useState();
@@ -74,7 +74,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   const addTopicItem = (e) => {
     e.preventDefault();
     setTopicOptions((pre) => [...pre, { label: topicName, value: topicName }]);
-    // setItems([...items, topicName || `New item ${index++}`]);
+    form.setFieldsValue({ topics: topicName })
     setTopicName("");
     inputRef.current?.focus();
   };
