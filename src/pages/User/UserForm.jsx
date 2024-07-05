@@ -33,7 +33,7 @@ const UserForm = () => {
     navigate("/login");
   };
   return (
-    <div className=" bg-[url('/photo/photo1.webp')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
+    <div className=" bg-[url('/photo/photo1.web')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
       <div className=" md:col-span-4"></div>
       <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 md:h-full bg-black bg-opacity-35 rounded-xl ">
         <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">

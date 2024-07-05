@@ -64,7 +64,7 @@ const TopicList = () => {
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: error.response.data?.message || "Error Happen",
+      text: error.response?.data?.message || "Error Happen",
     });
   }
 
