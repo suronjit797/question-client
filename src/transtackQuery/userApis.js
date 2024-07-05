@@ -7,14 +7,14 @@ export const createTopicFn = (body) => {
 
 export const getAllTopicFn = async () => {
     const { data } = await axios.get("/users");
-    const topicData = data.data;
-    return topicData;
+    return data?.data||[]
+  //   const topicData = data.data;
+  //   return topicData;
   };
 
 export const getSingleTopicFn = async (id) => {
     const { data } = await axios.get("/users/" + id);
-    const topicData = data.data;
-    return topicData;
+    return data?.data||{}
   };
    
 export const updateTopicFn = ({ id, body }) => {

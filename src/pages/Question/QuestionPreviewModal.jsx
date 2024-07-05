@@ -47,7 +47,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     answerText,
     solution,
   } = data;
-  const optionsItems = Object.keys(options);
+  const optionsItems = Object?.keys(options||{});
 
   const handleOk = () => {
     console.log({ data });
@@ -85,14 +85,14 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     formData.append("paper", data.paper);
     formData.append("chapter", data.chapter);
     formData.append("topics", data.topics);
-    formData.append("optionType", data.optionType);
+    formData.append("optionType", Boolean(data.optionType));
     data.tags.forEach((tag, index) => {
       formData.append(`tags[${index}]`, tag);
     });
     formData.append("institution", data.institution);
     formData.append("year", data.year);
     formData.append("difficulty", data.difficulty);
-    Object.keys(data.options).forEach((key) => {
+    Object.keys(data?.options||{}).forEach((key) => {
       console.log(data.options[key], key, data);
       if (typeof data.options[key] === "string") {
         formData.append(`options[${key}]`, data.options[key]);
