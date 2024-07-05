@@ -43,8 +43,8 @@ const TopicList = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
 
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  // const [current, setCurrent] = useState(1);
+  // const [pageSize, setPageSize] = useState(3);
 
   const { data:topics, isError, error, isFetching } = useQuery({
     queryKey: ["topic"],
@@ -123,8 +123,9 @@ const TopicList = () => {
   }, [user.role]);
 
   const handleTableChange = (pagination) => {
-    setCurrent(pagination.current);
-    setPageSize(pagination.pageSize);
+    console.log({pagination})
+    // setCurrent(pagination.current);
+    // setPageSize(pagination.pageSize);
   };
 
   return (
@@ -142,7 +143,7 @@ const TopicList = () => {
             columns={columns}
             pagination={{
               current: meta?.page,
-              pageSize: meta?.limit,
+              pageSize: 2,
               total: meta?.total,
             }}
             onChange={handleTableChange}
