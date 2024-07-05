@@ -7,7 +7,7 @@ function PrintMath({ text = "" }) {
   return (
     <div className="custom_math">
       {text.split("$").map((part, index) => {
-        console.log({ part });
+        // console.log({ part });
         if (index % 2 === 0) {
           return <span key={index}>{part}</span>;
         } else {
