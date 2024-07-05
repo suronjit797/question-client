@@ -12,6 +12,8 @@ const initialColumns = [
   {
     title: "No.",
     render: (text, record, index) => index + 1,
+    align: "center",
+    width: "100px",
   },
   {
     title: "Topic",
@@ -41,11 +43,17 @@ const TopicList = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
 
-  const { data, isError, error, isFetching } = useQuery({
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
+
+  const { data:topics, isError, error, isFetching } = useQuery({
     queryKey: ["topic"],
     queryFn: getAllTopicFn,
     // staleTime: 5000,
   });
+  console.log(topics)
+  const data = topics?.data || []
+  const meta = topics?.meta || {}
   const {
     mutate: deleteTopic,
     // isError: deleteIsError,
@@ -95,15 +103,17 @@ const TopicList = () => {
     {
       title: "Action",
       render: (text, record) => (
-        <>
+        <div>
           <Button primary type="primary" onClick={() => editHandler(record)}>
             <EditOutlined />
           </Button>
           <Button className="ml-2" type="primary" danger onClick={() => deleteHandler(record)}>
             <DeleteOutlined />
           </Button>
-        </>
+        </div>
       ),
+      align: "center",
+      width: "150px",
     },
   ];
   useEffect(() => {
@@ -111,6 +121,11 @@ const TopicList = () => {
       setColumns([...initialColumns, ...actionColumn]);
     }
   }, [user.role]);
+
+  const handleTableChange = (pagination) => {
+    setCurrent(pagination.current);
+    setPageSize(pagination.pageSize);
+  };
 
   return (
     <div className="container mx-auto">
@@ -122,7 +137,16 @@ const TopicList = () => {
       </div>
       <Spin spinning={isFetching}>
         <div>
-          <Table dataSource={data} columns={columns} />
+          <Table
+            dataSource={data}
+            columns={columns}
+            pagination={{
+              current: meta?.page,
+              pageSize: meta?.limit,
+              total: meta?.total,
+            }}
+            onChange={handleTableChange}
+          />
         </div>
       </Spin>
     </div>
