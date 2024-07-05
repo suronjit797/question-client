@@ -1,11 +1,13 @@
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { useMutation } from "@tanstack/react-query";
-import { Button, Form, Input, Select, Switch, Upload } from "antd";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Button, Form, Input, Select, Switch, Upload, Divider, Space } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 import PropTypes from "prop-types";
 import { allChapters, institutionOption, subjectOption } from "../../utils/SelectOption";
+import { getAllTopicFn } from "../../transtackQuery/topicApis";
+
 
 const yearOptions = [];
 for (let i = 1990; i <= new Date().getFullYear(); i++) {
@@ -15,11 +17,7 @@ for (let i = 1990; i <= new Date().getFullYear(); i++) {
   yearOptions.push({ label: `${i - 1}-${i}`, value: `${i - 1} - ${i}` });
 }
 
-const topicOption = [
-  { label: "azaz", value: "667ff284c9191d4994ff7275" },
-  { label: "azaz1", value: "667ff284c9191d4994ff7276" },
-  { label: "azaz2", value: "667ff284c9191d4994ff7277" },
-];
+
 const initData = {
   type: "mcq",
   question: {
@@ -82,16 +80,31 @@ const createQuestion = (body) => {
 
 const QuestionForm = ({ mode = "create", data = {} }) => {
   const [form] = Form.useForm();
+  const inputRef = useRef(null);
   // fetch
   const { mutate, isError, error } = useMutation({
     mutationKey: "createQuestion",
     mutationFn: createQuestion,
   });
+  const { data:topicData, isError:isTopicError, error:topicError, isFetching:isTopicFetching } = useQuery({
+    queryKey: ["topic"],
+    queryFn: getAllTopicFn,
+  });
+
 
   // state
   const [formData, setFormData] = useState(initData);
   const [chapterOptions, setChapterOptions] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [topicOptions, setTopicOptions] = useState([])
+  const [topicName, setTopicName] = useState('')
+
+  useEffect(()=>{
+    if(Array.isArray(topicData)){
+      const data = topicData.map(t=> ({label:t.topic, value:t._id}))
+      setTopicOptions(data)
+    }
+  },[])
 
   // state destructure
   const { type, subject, paper, optionType, question, solution } = formData;
@@ -103,6 +116,18 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
       setChapterOptions(chapters.map((c) => ({ label: <span className="capitalize">{c}</span>, value: c })));
     }
   }, [paper, subject]);
+
+
+  const addTopicItem = (e) => {
+    e.preventDefault();
+    setTopicOptions(pre=> ([...pre, {label: topicName, value: topicName}]))
+    // setItems([...items, topicName || `New item ${index++}`]);
+    setTopicName('');
+      inputRef.current?.focus();
+
+  };
+
+
 
   const handleFinish = async (values) => {
     console.log("Form Values:", values);
@@ -237,8 +262,34 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 placeholder="Select Topic"
                 filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                 showSearch={true}
-                options={topicOption}
-              ></Select>
+                options={topicOptions}
+                dropdownRender={(menu) => (
+                  <>
+                    {menu}
+                    <Divider
+                      style={{
+                        margin: '8px 0',
+                      }}
+                    />
+                    <Space
+                      style={{
+                        padding: '0 8px 4px',
+                      }}
+                    >
+                      <Input
+                        placeholder="Please enter topic name"
+                        ref={inputRef}
+                        value={topicName}
+                        onChange={e=> setTopicName(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      />
+                      <Button type="text" icon={<PlusOutlined />} onClick={addTopicItem}>
+                        Add Topic
+                      </Button>
+                    </Space>
+                  </>
+                )}
+              />
             </Form.Item>
 
             <Form.Item

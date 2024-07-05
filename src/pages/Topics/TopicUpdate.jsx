@@ -1,30 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import TopicForm from "./TopicForm";
-
-const getTopic = async (id) => {
-    
-    const { data } = await axios.get("/topics/"+id);
-    const topicData = data.data;
-    return topicData;
-
-  };
+import { getSingleTopicFn } from "../../transtackQuery/topicApis";
+import { Spin } from "antd";
+import Swal from "sweetalert2";
 
 const TopicUpdate = () => {
-    const {id}=useParams()
+  const { id } = useParams();  
 
-    const { data, isError, error, isFetching } = useQuery({
-        queryKey: ["topic", id],
-        queryFn: ()=>getTopic(id),
-      });
-console.log(data)
-    return (
-        <div>
-            <TopicForm mode="edit" data={data} />
-            
-        </div>
-    );
+  // transtack query
+  const { data, isError, error, isFetching } = useQuery({
+    queryKey: ["topic", id],
+    queryFn: () => getSingleTopicFn(id),
+  });
+  
+  // others
+  if (isError ) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.response.data?.message  || "Error Happen",
+    });
+  }
+
+  return (
+    <Spin spinning={isFetching}>
+      <TopicForm mode="edit" id={id} data={data} />
+    </Spin>
+  );
 };
 
 export default TopicUpdate;
