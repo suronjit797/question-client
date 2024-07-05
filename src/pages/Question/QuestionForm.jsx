@@ -91,13 +91,13 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     return e?.fileList;
   };
 
-  const normSingleFile = (e) => {
-    console.log(e);
-    if (Array.isArray(e)) {
-      return e[0];
-    }
-    return e?.fileList[0];
-  };
+  // const normSingleFile = (e) => {
+  //   console.log(e);
+  //   if (Array.isArray(e)) {
+  //     return e[0];
+  //   }
+  //   return e?.fileList[0];
+  // };
 
   const handlerValueChange = (item, all) => {
     console.log(item);
@@ -149,7 +149,10 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Subject"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => {
+                    console.log({ input, option });
+                    return (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase());
+                  }}
                   showSearch={true}
                   options={subjectOption}
                 />
@@ -167,7 +170,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Paper"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={["first", "second"].map((item) => ({
                     label: <span className="capitalize">{item}</span>,
@@ -188,7 +191,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Chapter"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={chapterOptions}
                 />
@@ -197,7 +200,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               <Form.Item name="topics" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
                 <Select
                   placeholder="Select Topic"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={topicOptions}
                   dropdownRender={(menu) => (
@@ -238,7 +241,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Question Type"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={[
                     { label: "MCQ", value: "mcq" },
@@ -342,7 +345,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                     <Select
                       placeholder="Select answer index"
                       filterOption={(input, option) =>
-                        (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                        (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())
                       }
                       showSearch={true}
                       options={[1, 2, 3, 4].map((item) => ({ label: `Option ${item}`, value: `option${item}` }))}
@@ -388,13 +391,11 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                             <Select
                               placeholder="Select Institution"
                               filterOption={(input, option) =>
-                                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                                (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())
                               }
                               showSearch={true}
                               options={institutionOption}
-                            >
-
-                            </Select>
+                            ></Select>
                           </Form.Item>
                         </div>
                         {/*  */}
@@ -410,7 +411,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                               placeholder="Year"
                               options={yearOptions}
                               filterOption={(input, option) =>
-                                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                                (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())
                               }
                               showSearch={true}
                             />
@@ -435,7 +436,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select difficulty"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={["easy", "medium", "hard"].map((item) => ({
                     label: <span className="capitalize">{item}</span>,
@@ -443,7 +444,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   }))}
                 />
               </Form.Item>
-             
+
               <Form.Item
                 name={["solution", "text"]}
                 label="Solution Text"

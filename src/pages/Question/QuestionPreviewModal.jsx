@@ -47,15 +47,23 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     answerText,
     solution,
   } = data;
-  const optionsItems = Object?.keys(options||{});
+  const optionsItems = Object?.keys(options || {});
 
   const handleOk = () => {
-    console.log({ data });
     const formData = new FormData();
 
     formData.append("type", data.type);
     formData.append("question[text]", data.question.text);
     formData.append("solution[text]", data.solution.text);
+    formData.append("answerText", data.answerText);
+    formData.append("uploader", data.uploader);
+    formData.append("subject", data.subject);
+    formData.append("paper", data.paper);
+    formData.append("chapter", data.chapter);
+    formData.append("topics", data.topics);
+    formData.append("optionType", Boolean(data.optionType));
+    formData.append("difficulty", data.difficulty);
+
     data.question.images.forEach((image, index) => {
       if (image.originFileObj) {
         formData.append(`question.images`, image.originFileObj);
@@ -78,21 +86,14 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
         formData.append(`solution[images][${index}][type]`, image.type);
       }
     });
-    formData.append("answerIndex", data.answerIndex);
-    formData.append("answerText", data.answerText);
-    formData.append("uploader", data.uploader);
-    formData.append("subject", data.subject);
-    formData.append("paper", data.paper);
-    formData.append("chapter", data.chapter);
-    formData.append("topics", data.topics);
-    formData.append("optionType", Boolean(data.optionType));
     data.tags.forEach((tag, index) => {
       formData.append(`tags[${index}]`, tag);
     });
-    formData.append("institution", data.institution);
-    formData.append("year", data.year);
-    formData.append("difficulty", data.difficulty);
-    Object.keys(data?.options||{}).forEach((key) => {
+    if (answerIndex) {
+      formData.append("answerIndex", data.answerIndex);
+    }
+
+    Object.keys(data?.options || {}).forEach((key) => {
       console.log(data.options[key], key, data);
       if (typeof data.options[key] === "string") {
         formData.append(`options[${key}]`, data.options[key]);
@@ -110,17 +111,6 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
       formData.append(`institutions[${index}][name]`, institution.name);
       formData.append(`institutions[${index}][year]`, institution.year);
     });
-
-    // Append fields to formData using map
-    // Object.entries(data).forEach(([key, value]) => {
-    //   if (Array.isArray(value)) {
-    //     value.forEach((item, index) => {
-    //       formData.append(`${key}[${index}]`, item);
-    //     });
-    //   } else {
-    //     formData.append(key, value);
-    //   }
-    // });
 
     if (mode === "create") {
       mutate(formData);
