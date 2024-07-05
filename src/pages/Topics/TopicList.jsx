@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spin, Table } from "antd";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import userRole, { authAccess } from "../../utils/userRole";
 import { useEffect, useState } from "react";
+import { getAllTopicFn } from "../../transtackQuery/topicApis";
 
 const initialColumns = [
   {
@@ -34,24 +34,18 @@ const initialColumns = [
   },
 ];
 
-const getTopic = async () => {
-  const { data } = await axios.get("/topics?");
-  const topicData = data.data;
-  return topicData;
-};
 
 const TopicList = () => {
   const navigate = useNavigate()
   const [columns, setColumns] = useState(initialColumns);
-  const { token, isLogin, user } = useSelector((state) => state.auth);
+  const { isLogin, user } = useSelector((state) => state.auth);
 
   const { data, isError, error, isFetching } = useQuery({
     queryKey: ["topic"],
-    queryFn: getTopic,
+    queryFn: getAllTopicFn,
     // staleTime: 5000,
   });
 
-  console.log(data);
   if (isError) {
     Swal.fire({
       icon: "error",
@@ -61,7 +55,6 @@ const TopicList = () => {
   }
 
 const editHandler=(record)=>{
-console.log(record)
 navigate(`/topic/edit/${record._id}`)
 }
 
