@@ -4,9 +4,10 @@ export const createQuestionFn = (body) => {
   return axios.post("/questions", body);
 };
 
-export const getAllQuestionFn = async () => {
-  const { data } = await axios.get("/questions");
-  return data.data;
+export const getAllQuestionFn = async (params) => {
+  console.log({params})
+  const { data } = await axios.get("/questions", {params});
+  return data;
 };
 
 export const getSingleQuestionFn = async (id) => {
