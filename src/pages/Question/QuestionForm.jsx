@@ -23,6 +23,14 @@ const finishFailed = (values) => {
 const initData = {};
 
 const QuestionForm = ({ mode = "create", data = {} }) => {
+// state
+const [formData, setFormData] = useState(initData);
+const [chapterOptions, setChapterOptions] = useState();
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [topicOptions, setTopicOptions] = useState([]);
+const [topicName, setTopicName] = useState("");
+const { type, subject, paper, chapter, optionType, question, solution } = formData;
+
   const [form] = Form.useForm();
   const inputRef = useRef(null);
 
@@ -32,16 +40,11 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     error: topicError,
     isFetching: isTopicFetching,
   } = useQuery({
-    queryKey: ["topic"],
-    queryFn: getAllTopicFn,
+    queryKey: ["topic", subject, paper, chapter ],
+    queryFn: ()=>getAllTopicFn({subject, paper, chapter, limit:100}),
   });
   const topicData = topics?.data || []
-  // state
-  const [formData, setFormData] = useState(initData);
-  const [chapterOptions, setChapterOptions] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [topicOptions, setTopicOptions] = useState([]);
-  const [topicName, setTopicName] = useState("");
+  
 
   // effect
   useEffect(() => {
@@ -61,7 +64,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   }, [topicData]);
 
   // state destructure
-  const { type, subject, paper, optionType, question, solution } = formData;
 
   // effect
   useEffect(() => {
@@ -122,7 +124,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   }
 
   return (
-    <Spin spinning={isTopicFetching}>
+    // <Spin spinning={isTopicFetching}>
       <div className="container p-11 my-auto">
         <div className="max-w-[450px] mx-auto questionFrom">
           <Form
@@ -478,7 +480,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
           <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, mode }} />
         )}
       </div>
-    </Spin>
+    // </Spin>
   );
 };
 

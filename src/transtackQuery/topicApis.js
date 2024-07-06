@@ -6,7 +6,6 @@ export const createTopicFn = (body) => {
 };
 
 export const getAllTopicFn = async (params) => {
-  console.log({ params });
   const { data } = await axios.get("/topics", { params });
   return data || {};
 };
@@ -24,3 +23,4 @@ export const updateTopicFn = ({ id, body }) => {
 export const deleteTopicFn = (id) => {
   return axios.delete("/topics/" + id);
 };
+
