@@ -43,17 +43,21 @@ const TopicList = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
 
-  // const [current, setCurrent] = useState(1);
-  // const [pageSize, setPageSize] = useState(3);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(3);
 
-  const { data:topics, isError, error, isFetching } = useQuery({
-    queryKey: ["topic"],
-    queryFn: getAllTopicFn,
-    // staleTime: 5000,
+  const {
+    data: topics,
+    isError,
+    error,
+    isFetching,
+  } = useQuery({
+    queryKey: ["topic", page, limit],
+    queryFn: () => getAllTopicFn({ page, limit }),
   });
-  console.log(topics)
-  const data = topics?.data || []
-  const meta = topics?.meta || {}
+
+  const data = topics?.data || [];
+  const meta = topics?.meta || {};
   const {
     mutate: deleteTopic,
     // isError: deleteIsError,
@@ -122,8 +126,10 @@ const TopicList = () => {
     }
   }, [user.role]);
 
-  const handleTableChange = (pagination) => {
-    console.log({pagination})
+  const handleTableChange = (current, size) => {
+    setPage(current);
+    setLimit(size);
+    // console.log({ page, size });
     // setCurrent(pagination.current);
     // setPageSize(pagination.pageSize);
   };
@@ -142,11 +148,11 @@ const TopicList = () => {
             dataSource={data}
             columns={columns}
             pagination={{
-              current: meta?.page,
-              pageSize: 2,
+              current: page,
+              pageSize: limit,
               total: meta?.total,
+              onChange: handleTableChange,
             }}
-            onChange={handleTableChange}
           />
         </div>
       </Spin>
