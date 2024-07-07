@@ -127,7 +127,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
 
   return (
     // <Spin spinning={isTopicFetching}>
-      <div className="container p-11 my-auto">
+      <div className="container mt-28 p-11 my-auto">
         <div className="max-w-[450px] mx-auto questionFrom">
           <Form
             form={form}
