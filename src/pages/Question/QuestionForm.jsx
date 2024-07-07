@@ -8,11 +8,13 @@ import { allChapters, institutionOption, subjectOption } from "../../utils/Selec
 import { getAllTopicFn } from "../../transtackQuery/topicApis";
 import Swal from "sweetalert2";
 
+const currentYear = new Date().getFullYear();
 const yearOptions = [];
-for (let i = 1990; i <= new Date().getFullYear(); i++) {
-  yearOptions.push({ label: i + "", value: i });
+
+for (let i = currentYear; i >= 1990; i--) {
+  yearOptions.push({ label: i + "", value: i + "" });
 }
-for (let i = 1990; i <= new Date().getFullYear(); i++) {
+for (let i = currentYear; i >= 1990; i--) {
   yearOptions.push({ label: `${i - 1}-${i}`, value: `${i - 1}-${i}` });
 }
 
@@ -327,7 +329,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                           // name={`option${item}`}
                           name={["options", `option${item}`]}
                           label={`Option ${item}`}
-                          rules={[{ required: true, message: `Input the option ${item}` }]}
+                          // rules={[{ required: true, message: `Input the option ${item}` }]}
                         >
                           <Input placeholder={`Enter option ${item}`} />
                         </Form.Item>
@@ -337,12 +339,12 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                   <Form.Item
                     name="answerIndex"
                     label="Answer Index"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Input the answer index",
-                      },
-                    ]}
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Input the answer index",
+                    //   },
+                    // ]}
                   >
                     <Select
                       placeholder="Select answer index"
@@ -359,7 +361,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                   <Form.Item
                     name="answerText"
                     label="Answer Text"
-                    rules={[{ required: true, message: "Input the answer text" }]}
+                    // rules={[{ required: true, message: "Input the answer text" }]}
                   >
                     <Input placeholder="Enter Answer Text" />
                   </Form.Item>
@@ -369,12 +371,12 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
               <Form.Item
                 label="Tags"
                 name="tags"
-                rules={[
-                  {
-                    required: true,
-                    message: "Input the tags",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Input the tags",
+                //   },
+                // ]}
               >
                 <Select mode="tags" maxTagCount="responsive" placeholder="Add tags" />
               </Form.Item>
@@ -388,7 +390,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                           <Form.Item
                             {...restField}
                             name={[name, "name"]}
-                            rules={[{ required: true, message: "Select the institution name" }]}
+                            // rules={[{ required: true, message: "Select the institution name" }]}
                           >
                             <Select
                               placeholder="Select Institution"
@@ -407,7 +409,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                           <Form.Item
                             {...restField}
                             name={[name, "year"]}
-                            rules={[{ required: true, message: "Select the year" }]}
+                            // rules={[{ required: true, message: "Select the year" }]}
                           >
                             <Select
                               placeholder="Year"
@@ -434,7 +436,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
               <Form.Item
                 name="difficulty"
                 label="Difficulty"
-                rules={[{ required: true, message: "Select the difficulty" }]}
+                // rules={[{ required: true, message: "Select the difficulty" }]}
               >
                 <Select
                   placeholder="Select difficulty"
@@ -450,7 +452,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
               <Form.Item
                 name={["solution", "text"]}
                 label="Solution Text"
-                rules={[{ required: true, message: "Input the solution text" }]}
+                // rules={[{ required: true, message: "Input the solution text" }]}
               >
                 <Input.TextArea rows={4} placeholder="Enter solution Text" />
               </Form.Item>

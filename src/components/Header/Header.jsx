@@ -34,7 +34,7 @@ const Header = () => {
     navigate("/login");
   };
   return (
-    <header className=" bg-[#254336]  py-4 px-2 xl:py-5  md:py-5 capitalize">
+    <header className=" bg-[#254336]  py-4 px-2 xl:py-5  md:py-5 capitalize fixed z-50 w-screen">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link to="/">
