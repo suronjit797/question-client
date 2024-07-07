@@ -11,7 +11,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="w-full  text-primary font-semibold border-2 border-gray-500 h-[79vh] ">
+    <div className="w-full mt-0 sticky text-primary font-semibold border-2  h-[70vh] ">
       {menuItems.map((item, index) => (
         <div key={index}>
           <div
