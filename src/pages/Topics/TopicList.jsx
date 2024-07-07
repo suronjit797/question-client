@@ -135,7 +135,7 @@ const TopicList = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-28">
       <div className="flex items-center my-4">
         <h1 className="  items-center ">Topic List</h1>
         <Link to="create" className="ms-auto mr-3 p-2 md:p-3 rounded  bg-primary text-accent hover:text-accent-hover">
