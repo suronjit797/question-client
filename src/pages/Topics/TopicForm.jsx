@@ -43,7 +43,7 @@ const TopicForm = ({ mode = "create", data = {} }) => {
       setFormData("updateId", data);
       form.setFieldsValue(data);
     }
-  }, [mode, data]);
+  }, [mode, data, form]);
 
   useEffect(() => {
     if (subject && paper) {
@@ -90,7 +90,7 @@ const TopicForm = ({ mode = "create", data = {} }) => {
 
   return (
     <Spin spinning={isPending || isUpdatePending}>
-      <div className="container p-11 my-auto">
+      <div className="container mt-28 p-11 my-auto">
         <div className="max-w-[450px] mx-auto questionFrom">
           <Form
             form={form}
@@ -161,7 +161,7 @@ const TopicForm = ({ mode = "create", data = {} }) => {
               </Form.Item>
 
               <Form.Item name="topic" label="Topics" rules={[{ required: true, message: "Input the topics" }]}>
-                <Input placeholder="Select topic" />
+                <Input placeholder="Select Topic" />
               </Form.Item>
             </div>
             <Form.Item>
