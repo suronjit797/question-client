@@ -43,13 +43,13 @@ const QuestionList = () => {
 
   return (
     <div className=" mt-28">
-      <div className="flex justify-start z-0 items-start ">
+      <div className="flex justify-start items-start ">
         {/* side menu */}
-        <div className=" w-[20%] h-screen mt-0 fixed ">
+        <div className=" w-[20%] h-auto border-2 hidden   mt-0 fixed ">
           <SideBar />
         </div>
         {/* question list */}
-        <div className=" w-[80%] ml-auto pt-2 l">
+        <div className=" w-[80%] mx-auto  pt-2 l">
           <div className="flex justify-end ms-auto">
             {authAccess(userRole.admin).includes(user?.role) && (
               <Link to="create" className=" mr-3 p-2 md:p-3 rounded  bg-primary text-accent hover:text-accent-hover">
@@ -57,20 +57,20 @@ const QuestionList = () => {
               </Link>
             )}
           </div>
-          <div className="border-b-2 border-opacity-35 border-primary">
+          <div className=" border-opacity-35 border-primary">
             <SearchForm {...{ params, setParams }} />
           </div>
-          <div>
+          <div className="bg-gray-100 pt-4">
             <div className="ml-5 font-semibold text-xl">
               Total <span className="text-green-500 text-xl">{data.length}</span> Question
             </div>
             {Array.isArray(data)
               ? data?.map((item, index) => {
                   return (
-                    <div className="p-5 pb-24 border-b-[12px] border-l-green-400" key={index}>
+                    <div className="p-5 pb-24 bg-white rounded shadow m-4 border-l-green-400" key={index}>
                       <div className="ml-9">
                         <h1 className="text-xl flex items-start gap-[6px] font-semibold">
-                          <span className="mr-3">{index + 1}.</span>
+                          <span className="mr-3">{((meta.page-1)*meta.limit)+(index + 1)}.</span>
                           <PrintMath text={item?.question?.text} />
                         </h1>
                         {item.type === "mcq" ? (
@@ -135,7 +135,7 @@ const QuestionList = () => {
                             <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
                             <h1 className="text-xl font-semibold">Solution:</h1>
                           </div>
-                          <p className="mt-2 mb-6 text-justify">{item.solution.text}</p>
+                          <p className="mt-2 mb-6 text-justify"><PrintMath text={item?.solution.text} /></p>
                         </div>
                       </div>
                     </div>

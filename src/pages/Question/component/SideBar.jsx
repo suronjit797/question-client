@@ -7,11 +7,12 @@ const SideBar = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleMenu = (index) => {
+    
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="w-full mt-0 sticky text-primary font-semibold border-2  h-[70vh] ">
+    <div className="w-full text-primary bg-slate-50 font-semibold   h-4/5 ">
       {menuItems.map((item, index) => (
         <div key={index}>
           <div
