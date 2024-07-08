@@ -2,121 +2,103 @@ import { Form, Input, Select } from "antd";
 import { allChapters, subjectOption } from "../../../utils/SelectOption";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useQuery } from "@tanstack/react-query";
+import { getAllTopicFn } from "../../../transtackQuery/topicApis";
 
 const initData = {};
 
 const SearchForm = ({ params, setParams }) => {
+  const [form] = Form.useForm();
   const [chapterOptions, setChapterOptions] = useState();
-  const { subject, paper } = params;
+  const [topicOptions, setTopicOptions] = useState([]);
 
+  const { subject, paper, chapter } = params;
+
+  const {
+    data: topics,
+    isError: isTopicError,
+    error: topicError,
+    isFetching: isTopicFetching,
+  } = useQuery({
+    queryKey: ["topic", subject, paper, chapter],
+    queryFn: () => getAllTopicFn({ subject, paper, chapter, limit: 100 }),
+  });
+
+  useEffect(() => {
+    const topicData = topics?.data || [];
+    if (Array.isArray(topicData)) {
+      const data = topicData.map((t) => ({ label: t.topic, value: t._id }));
+      setTopicOptions(data);
+    }
+  }, [topics]);
 
   useEffect(() => {
     if (subject && paper) {
       const chapters = allChapters.find((c) => c.subject === subject && c.paper === paper)?.chapters || [];
-      console.log(chapters)
+      console.log(chapters);
       setChapterOptions(chapters.map((c) => ({ label: <span className="capitalize">{c}</span>, value: c })));
     }
   }, [paper, subject]);
 
+  const changeHandler = (name, value) => {
+    if (["subject", "paper", "chapter"].includes(name)) {
+      setParams((pre) => ({ ...pre, [name]: value, topic: undefined }));
+      form.setFieldsValue({topic:undefined})
+    } else {
+      setParams((pre) => ({ ...pre, [name]: value }));
+    }
+  };
+
   return (
     <div className=" ">
-      <Form initialValues={initData}>
+      <Form form={form} name="QuestionSearch" layout="vertical" initialValues={initData}>
         <div className=" grid grid-cols-2 px-3 py-2 gap-4">
-          <Form.Item
-            name="subject"
-            label="Subject"
-            rules={[
-              {
-                required: true,
-                message: "Input the subject",
-              },
-            ]}
-          >
+          <Form.Item name="subject" label="Subject">
             <Select
               showSearch
               placeholder="Select a subject"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.subject}
-              onChange={(e) => setParams((pre) => ({ ...pre, subject: e }))}
+              onChange={(e) => changeHandler("subject", e)}
               options={subjectOption}
             />
           </Form.Item>
-          <Form.Item
-            name="paper"
-            label="Paper"
-            rules={[
-              {
-                required: false,
-                message: "Input the answer index",
-              },
-            ]}
-          >
+          <Form.Item name="paper" label="Paper">
             <Select
               showSearch
               placeholder="Select a Paper"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.paper}
-              onChange={(e) => setParams((pre) => ({ ...pre, paper: e }))}
+              onChange={(e) => changeHandler("paper", e)}
               options={["first", "second"].map((item) => ({
                 label: <span className="capitalize">{item}</span>,
                 value: item,
               }))}
             />
           </Form.Item>
-          <Form.Item
-            name="chapter"
-            label="Chapter"
-            rules={[
-              {
-                required: false,
-                message: "Input the answer index",
-              },
-            ]}
-          >
+          <Form.Item name="chapter" label="Chapter">
             <Select
               showSearch
               placeholder="Select a Chapter"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.chapter}
-              onChange={(e) => setParams((pre) => ({ ...pre, chapter: e }))}
+              onChange={(e) => changeHandler("chapter", e)}
               options={chapterOptions}
             />
           </Form.Item>
-          <Form.Item
-            name="topic"
-            label="Topic"
-            rules={[
-              {
-                required: false,
-                message: "Input the answer index",
-              },
-            ]}
-          >
+          <Form.Item name="topic" label="Topic">
             <Select
               showSearch
               placeholder="Select a Topic"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.topic}
-              onChange={(e) => setParams((pre) => ({ ...pre, topic: e }))}
-              options={subjectOption}
+              onChange={(e) => changeHandler("topic", e)}
+              options={topicOptions}
             />
           </Form.Item>
-
-          <Form.Item
-            name="search"
-            label="Search"
-            rules={[
-              {
-                required: false,
-                message: "Input the answer index",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Search"
-              value={params.query}
-              onChange={(e) => setParams((pre) => ({ ...pre, query: e.target.value }))}
-            />
+          {console.log(params.topic)}
+          <Form.Item name="search" label="Search">
+            <Input placeholder="Search" value={params.query} onChange={(e) => changeHandler("query", e.target.value)} />
           </Form.Item>
         </div>
       </Form>

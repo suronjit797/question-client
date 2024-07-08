@@ -3,32 +3,29 @@ export const menuItems = [
       title: 'Type',
       content:[
         {
-          name: "Name-1",
+          name: "MCQ",
           path:"/"
         },
         {
-          name: "Name-2",
+          name: "Written",
           path:"/"
         },
-        {
-          name: "Name-3",
-          path:"/"
-        },
+        
       ]
     },
     {
       title: 'Level',
       content:[
         {
-          name: "Name-1",
+          name: "Easy",
           path:"/"
         },
         {
-          name: "Name-2",
+          name: "Medium",
           path:"/"
         },
         {
-          name: "Name-3",
+          name: "Hard",
           path:"/"
         },
       ]
