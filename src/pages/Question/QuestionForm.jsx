@@ -25,13 +25,13 @@ const finishFailed = (values) => {
 const initData = {};
 
 const QuestionForm = ({ mode = "create", data = {} }) => {
-// state
-const [formData, setFormData] = useState(initData);
-const [chapterOptions, setChapterOptions] = useState();
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [topicOptions, setTopicOptions] = useState([]);
-const [topicName, setTopicName] = useState("");
-const { type, subject, paper, chapter, optionType, question, solution } = formData;
+  // state
+  const [formData, setFormData] = useState(initData);
+  const [chapterOptions, setChapterOptions] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [topicOptions, setTopicOptions] = useState([]);
+  const [topicName, setTopicName] = useState("");
+  const { type, subject, paper, chapter, optionType, question, solution } = formData;
 
   const [form] = Form.useForm();
   const inputRef = useRef(null);
@@ -42,11 +42,11 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
     error: topicError,
     isFetching: isTopicFetching,
   } = useQuery({
-    queryKey: ["topic", subject, paper, chapter ],
-    queryFn: ()=>getAllTopicFn({subject, paper, chapter, limit:100}),
+    queryKey: ["topic", subject, paper, chapter],
+    queryFn: () => getAllTopicFn({ subject, paper, chapter, limit: 100 }),
   });
-  const topicData = topics?.data || []
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const topicData = topics?.data || [];
 
   // effect
   useEffect(() => {
@@ -78,7 +78,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
   const addTopicItem = (e) => {
     e.preventDefault();
     setTopicOptions((pre) => [...pre, { label: topicName, value: topicName }]);
-    form.setFieldsValue({ topics: topicName })
+    form.setFieldsValue({ topics: topicName });
     setTopicName("");
     inputRef.current?.focus();
   };
@@ -126,7 +126,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
   }
 
   return (
-    // <Spin spinning={isTopicFetching}>
+    <Spin spinning={isTopicFetching}>
       <div className="container mt-28 p-11 my-auto">
         <div className="max-w-[450px] mx-auto questionFrom">
           <Form
@@ -378,7 +378,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                 //   },
                 // ]}
               >
-                <Select mode="tags" maxTagCount="responsive" placeholder="Add tags" />
+                <Select mode="tags" maxTagCount="responsive" placeholder="Add Tags" />
               </Form.Item>
 
               <Form.List name="institutions">
@@ -439,7 +439,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                 // rules={[{ required: true, message: "Select the difficulty" }]}
               >
                 <Select
-                  placeholder="Select difficulty"
+                  placeholder="Select Difficulty"
                   filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={["easy", "medium", "hard"].map((item) => ({
@@ -454,7 +454,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
                 label="Solution Text"
                 // rules={[{ required: true, message: "Input the solution text" }]}
               >
-                <Input.TextArea rows={4} placeholder="Enter solution Text" />
+                <Input.TextArea rows={4} placeholder="Enter Solution Text" />
               </Form.Item>
 
               <Form.Item
@@ -482,7 +482,7 @@ const { type, subject, paper, chapter, optionType, question, solution } = formDa
           <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, mode }} />
         )}
       </div>
-    // </Spin>
+    </Spin>
   );
 };
 

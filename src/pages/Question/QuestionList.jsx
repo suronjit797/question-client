@@ -11,21 +11,27 @@ import PrintMath from "../../components/PrintMath/PrintMath";
 import { FaChevronDown } from "react-icons/fa";
 import { GiArrowScope } from "react-icons/gi";
 
-const optionNumber = ["A", "B", "C", "D"];
+const optionNumber = {
+  option1: "a",
+  option2: "b",
+  option3: "c",
+  option4: "d",
+};
 
 const QuestionList = () => {
-  const { token, isLogin, user } = useSelector((state) => state.auth);
+  const {  user } = useSelector((state) => state.auth);
   const [params, setParams] = useState({});
   const [solution, setSolution] = useState(false);
 
   const {
     data: question,
-    isError,
-    error,
-    isFetching,
+    // isError,
+    // error,
+    // isFetching,
   } = useQuery({
     queryKey: ["question", params],
     queryFn: () => getAllQuestionFn(params),
+    keepPreviousData: true,
   });
 
   const data = question?.data || [];
@@ -34,8 +40,6 @@ const QuestionList = () => {
   const handleTableChange = (page, limit) => {
     setParams((pre) => ({ ...pre, page, limit }));
   };
-
-  
 
   return (
     <div className=" mt-28">
@@ -63,33 +67,34 @@ const QuestionList = () => {
             {Array.isArray(data)
               ? data?.map((item, index) => {
                   return (
-                    <div className="p-5 border-b-[12px] border-l-green-400" key={index}>
+                    <div className="p-5 pb-24 border-b-[12px] border-l-green-400" key={index}>
                       <div className="ml-9">
-                        <h1 className="text-xl flex items-center gap-[6px] font-semibold">
-                          {index + 1}.<PrintMath text={item?.question?.text} />
+                        <h1 className="text-xl flex items-start gap-[6px] font-semibold">
+                          <span className="mr-3">{index + 1}.</span>
+                          <PrintMath text={item?.question?.text} />
                         </h1>
                         {item.type === "mcq" ? (
-                          <div className="ml-5 gap-5 mt-4">
+                          <div className=" flex flex-col ml-10 gap-2 mt-4">
                             {/* <h1>{optionNumber[item.answerIndex]}</h1> */}
                             <h1>
                               <span>
-                                {item.options.map((t, i) => (
+                                {/* {item.options.map((t, i) => (
                                   <h2 key={i}>
                                     <span>{optionNumber[i]}</span>. {t}
                                   </h2>
-                                ))}
+                                ))} */}
                               </span>
                             </h1>
 
-                            {/* <h2>A. {item.options.option1}</h2>
-                        <h2>B. {item.options.option2}</h2>
-                        <h2>C. {item.options.option3}</h2>
-                        <h2>D. {item.options.option4}</h2> */}
+                            <h2>a) {item.options.option1}</h2>
+                            <h2>b) {item.options.option2}</h2>
+                            <h2>c) {item.options.option3}</h2>
+                            <h2>d) {item.options.option4}</h2>
                           </div>
                         ) : (
-                          <> azaz</>
+                          <></>
                         )}
-                        <div className=" flex justify-between items-center">
+                        <div className=" flex justify-end items-center">
                           {item.institutions.map((t, i) => (
                             <div className="ml-4 mt-8 " key={i}>
                               <h2 className="rounded text-sm py-1 px-2 bg-red-200 font-semibold text-red-600">
@@ -100,7 +105,7 @@ const QuestionList = () => {
                         </div>
                         <div className="flex items-start mt-8">
                           <div
-                            onClick={() => solution? setSolution(null): setSolution(item._id)}
+                            onClick={() => (solution ? setSolution(null) : setSolution(item._id))}
                             className="flex justify-between items-center  w-auto px-2 py-1 text-xl font-semibold text-green-500 border-2 border-green-500 hover:bg-green-500 hover:text-white"
                           >
                             {" "}
@@ -112,21 +117,25 @@ const QuestionList = () => {
                         </div>
                         {/* solution */}
 
-                        <div className={solution===item._id ? " block py-4 px-6 border-2 mt-4" : "hidden"}>
+                        <div className={solution === item._id ? " block py-4 px-6 border-2 mt-4 mb-6" : "hidden"}>
                           <div className=" flex items-center">
                             <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
                             <h1 className=" ">
                               <span className="text-xl font-semibold">Answer:</span>{" "}
-                              <span className=" ml-1">
-                                {optionNumber[item.answerIndex]}. {item.answerText}
-                              </span>
+                              {item.type === "mcq" ? (
+                                <span className=" ml-1">
+                                  {optionNumber[item.answerIndex]}. {item.options[item.answerIndex]}
+                                </span>
+                              ) : (
+                                <span className=" ml-1">{item.answerText}</span>
+                              )}
                             </h1>
                           </div>
                           <div className=" flex items-center">
                             <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
                             <h1 className="text-xl font-semibold">Solution:</h1>
                           </div>
-                          <p></p>
+                          <p className="mt-2 mb-6 text-justify">{item.solution.text}</p>
                         </div>
                       </div>
                     </div>
@@ -134,12 +143,14 @@ const QuestionList = () => {
                 })
               : ""}
           </div>
-          <Pagination
-            current={meta.page || 1}
-            pageSize={meta.limit || 10}
-            onChange={handleTableChange}
-            total={meta.total || 0}
-          />
+          <div className="flex justify-end items-center mt-8 mb-28 mx-11">
+            <Pagination
+              current={meta.page || 1}
+              pageSize={meta.limit || 10}
+              onChange={handleTableChange}
+              total={meta.total || 0}
+            />
+          </div>
         </div>
       </div>
     </div>

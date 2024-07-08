@@ -13,7 +13,12 @@ const optionNumber = {
 
 const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
   // fetch
-  const { mutate, isError, error } = useMutation({
+  const {
+    mutate,
+    isError,
+    error,
+    isSuccess: createSuccess,
+  } = useMutation({
     mutationKey: "createQuestion",
     mutationFn: createQuestionFn,
   });
@@ -22,6 +27,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     mutate: update,
     // isError,
     // error,
+    isSuccess: updateSuccess,
   } = useMutation({
     mutationKey: "updateQuestion",
     mutationFn: updateQuestionFn,
@@ -64,7 +70,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     formData.append("optionType", Boolean(data.optionType));
     formData.append("difficulty", data.difficulty);
 
-    data.question.images.forEach((image, index) => {
+    data.question.images?.forEach((image, index) => {
       if (image.originFileObj) {
         formData.append(`question.images`, image.originFileObj);
       } else {
@@ -75,7 +81,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
         formData.append(`question[images][${index}][type]`, image.type);
       }
     });
-    data.solution.images.forEach((image, index) => {
+    data.solution.images?.forEach((image, index) => {
       if (image.originFileObj) {
         formData.append(`solution.images`, image.originFileObj);
       } else {
@@ -86,14 +92,14 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
         formData.append(`solution[images][${index}][type]`, image.type);
       }
     });
-    data.tags.forEach((tag, index) => {
+    data.tags?.forEach((tag, index) => {
       formData.append(`tags[${index}]`, tag);
     });
     if (answerIndex) {
       formData.append("answerIndex", data.answerIndex);
     }
 
-    Object.keys(data?.options || {}).forEach((key) => {
+    Object.keys(data?.options || {})?.forEach((key) => {
       console.log(data.options[key], key, data);
       if (typeof data.options[key] === "string") {
         formData.append(`options[${key}]`, data.options[key]);
@@ -107,17 +113,21 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
         formData.append(`options[${key}][type]`, data.options[key].type);
       }
     });
-    data.institutions.forEach((institution, index) => {
+    data.institutions?.forEach((institution, index) => {
       formData.append(`institutions[${index}][name]`, institution.name);
       formData.append(`institutions[${index}][year]`, institution.year);
     });
-
+    console.log(mode);
     if (mode === "create") {
       mutate(formData);
     } else {
       update({ id: data._id, body: formData });
     }
+    if(createSuccess||updateSuccess){
+      setIsModalOpen(false)
+    }
   };
+
   return (
     <>
       <Modal title="Preview" open={isModalOpen} onOk={handleOk} onCancel={handleClose} centered className="my-4">
