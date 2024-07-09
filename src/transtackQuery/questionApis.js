@@ -5,7 +5,6 @@ export const createQuestionFn = (body) => {
 };
 
 export const getAllQuestionFn = async (params) => {
-  
   const { data } = await axios.get("/questions", {params});
   return data;
 };

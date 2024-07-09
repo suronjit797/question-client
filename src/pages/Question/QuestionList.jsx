@@ -6,10 +6,11 @@ import { getAllQuestionFn } from "../../transtackQuery/questionApis";
 import { useQuery } from "@tanstack/react-query";
 import SideBar from "./component/SideBar";
 import SearchForm from "./component/SearchForm";
-import { Pagination } from "antd";
+import { Pagination, Tooltip } from "antd";
 import PrintMath from "../../components/PrintMath/PrintMath";
 import { FaChevronDown } from "react-icons/fa";
 import { GiArrowScope } from "react-icons/gi";
+import { BsFilterLeft } from "react-icons/bs";
 
 const optionNumber = {
   option1: "a",
@@ -19,9 +20,10 @@ const optionNumber = {
 };
 
 const QuestionList = () => {
-  const {  user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const [params, setParams] = useState({});
   const [solution, setSolution] = useState(false);
+  const [filter, setFilter] = useState(false);
 
   const {
     data: question,
@@ -40,6 +42,9 @@ const QuestionList = () => {
   const handleTableChange = (page, limit) => {
     setParams((pre) => ({ ...pre, page, limit }));
   };
+  const filterHandler = () => {
+    setFilter(!filter);
+  };
 
   return (
     <div className=" mt-28">
@@ -50,14 +55,17 @@ const QuestionList = () => {
         </div>
         {/* question list */}
         <div className=" w-[80%] mx-auto  pt-2 l">
-          <div className="flex justify-end ms-auto">
+          <div className="flex justify-between items-center mb-3 ms-auto">
+            <Tooltip title="filter">
+              <BsFilterLeft onClick={filterHandler} className=" text-4xl text-green-700 ml-3" />
+            </Tooltip>
             {authAccess(userRole.admin).includes(user?.role) && (
-              <Link to="create" className=" mr-3 p-2 md:p-3 rounded  bg-primary text-accent hover:text-accent-hover">
+              <Link to="create" className=" mr-3 p-1 md:p-2  rounded  bg-primary text-accent hover:text-accent-hover">
                 <button className=" font-semibold"> Create Question </button>
               </Link>
             )}
           </div>
-          <div className=" border-opacity-35 border-primary">
+          <div className={filter ? " block border-opacity-35 border-primary" : "hidden"}>
             <SearchForm {...{ params, setParams }} />
           </div>
           <div className="bg-gray-100 pt-4">
@@ -69,22 +77,13 @@ const QuestionList = () => {
                   return (
                     <div className="p-5 pb-24 bg-white rounded shadow m-4 border-l-green-400" key={index}>
                       <div className="ml-9">
-                        <h1 className="text-xl flex items-start gap-[6px] font-semibold">
-                          <span className="mr-3">{((meta.page-1)*meta.limit)+(index + 1)}.</span>
+                        <h1 className="text-xl flex items-baseline gap-[6px] font-semibold">
+                          <span className="mr-3">{(meta.page - 1) * meta.limit + (index + 1)}.</span>
                           <PrintMath text={item?.question?.text} />
                         </h1>
                         {item.type === "mcq" ? (
                           <div className=" flex flex-col ml-10 gap-2 mt-4">
                             {/* <h1>{optionNumber[item.answerIndex]}</h1> */}
-                            <h1>
-                              <span>
-                                {/* {item.options.map((t, i) => (
-                                  <h2 key={i}>
-                                    <span>{optionNumber[i]}</span>. {t}
-                                  </h2>
-                                ))} */}
-                              </span>
-                            </h1>
 
                             <h2>a) {item.options.option1}</h2>
                             <h2>b) {item.options.option2}</h2>
@@ -135,7 +134,9 @@ const QuestionList = () => {
                             <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
                             <h1 className="text-xl font-semibold">Solution:</h1>
                           </div>
-                          <p className="mt-2 mb-6 text-justify"><PrintMath text={item?.solution.text} /></p>
+                          <p className="mt-2 mb-6 text-justify">
+                            <PrintMath text={item?.solution.text} />
+                          </p>
                         </div>
                       </div>
                     </div>

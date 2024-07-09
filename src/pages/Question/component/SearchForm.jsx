@@ -96,7 +96,7 @@ const SearchForm = ({ params, setParams }) => {
               options={topicOptions}
             />
           </Form.Item>
-          {console.log(params.topic)}
+          
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" value={params.query} onChange={(e) => changeHandler("query", e.target.value)} />
           </Form.Item>

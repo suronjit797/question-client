@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import PrintMath from "../../components/PrintMath/PrintMath";
 import { useMutation } from "@tanstack/react-query";
 import { createQuestionFn, updateQuestionFn } from "../../transtackQuery/questionApis";
+// import Swal from "sweetalert2";
+// import { useNavigate } from "react-router-dom";
 
 const optionNumber = {
   option1: "a",
@@ -12,11 +14,12 @@ const optionNumber = {
 };
 
 const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
+  // const navigate = useNavigate();
   // fetch
   const {
     mutate,
-    isError,
-    error,
+    // isError,
+    // error,
     isSuccess: createSuccess,
   } = useMutation({
     mutationKey: "createQuestion",
@@ -25,7 +28,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
 
   const {
     mutate: update,
-    // isError,
+    //  isError:isUpdateError,
     // error,
     isSuccess: updateSuccess,
   } = useMutation({
@@ -123,10 +126,27 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode }) => {
     } else {
       update({ id: data._id, body: formData });
     }
-    if(createSuccess||updateSuccess){
-      setIsModalOpen(false)
+    if (createSuccess || updateSuccess) {
+      setIsModalOpen(false);
     }
   };
+
+  // if (isError) {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Oops...",
+  //     text: error.response.data?.message || "Error Happen",
+  //   });
+  // }
+
+  // if (createSuccess) {
+  //   Swal.fire({
+  //     icon: "success",
+  //     title: "Success",
+  //     text: "Question Created Successfully",
+  //   });
+  //   navigate("/questionForm");
+  // }
 
   return (
     <>
@@ -249,6 +269,7 @@ QuestionPreviewModal.propTypes = {
   isModalOpen: PropTypes.bool.isRequired,
   setIsModalOpen: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
+  // mode: PropTypes.object.isRequired,
 };
 
 export default QuestionPreviewModal;
