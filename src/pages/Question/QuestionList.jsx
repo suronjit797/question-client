@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userRole, { authAccess } from "../../utils/userRole";
 import { useState } from "react";
 import { getAllQuestionFn } from "../../transtackQuery/questionApis";
@@ -11,6 +11,7 @@ import PrintMath from "../../components/PrintMath/PrintMath";
 import { FaChevronDown } from "react-icons/fa";
 import { GiArrowScope } from "react-icons/gi";
 import { BsFilterLeft } from "react-icons/bs";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const optionNumber = {
   option1: "a",
@@ -20,6 +21,7 @@ const optionNumber = {
 };
 
 const QuestionList = () => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [params, setParams] = useState({});
   const [solution, setSolution] = useState(false);
@@ -75,7 +77,17 @@ const QuestionList = () => {
             {Array.isArray(data)
               ? data?.map((item, index) => {
                   return (
-                    <div className="p-5 pb-24 bg-white rounded shadow m-4 border-l-green-400" key={index}>
+                    <div className="p-5 pb-24 bg-white rounded shadow m-4 relative border-l-green-400" key={index}>
+                      {authAccess(userRole.admin).includes(user?.role) && (
+                        <div className="absolute top-3 right-3 flex gap-3">
+                          <div className="text-green-500 cursor-pointer" onClick={() => navigate(`edit/${item._id}`)}>
+                            <EditOutlined />
+                          </div>
+                          <div className="text-red-500 cursor-pointer">
+                            <DeleteOutlined />
+                          </div>
+                        </div>
+                      )}
                       <div className="ml-9">
                         <h1 className="text-xl flex items-baseline gap-[6px] font-semibold">
                           <span className="mr-3">{(meta.page - 1) * meta.limit + (index + 1)}.</span>
@@ -85,10 +97,10 @@ const QuestionList = () => {
                           <div className=" flex flex-col ml-10 gap-2 mt-4">
                             {/* <h1>{optionNumber[item.answerIndex]}</h1> */}
 
-                            <h2>a) {item.options.option1}</h2>
-                            <h2>b) {item.options.option2}</h2>
-                            <h2>c) {item.options.option3}</h2>
-                            <h2>d) {item.options.option4}</h2>
+                            {/* <h2>a) {item.options?.option1}</h2>
+                            <h2>b) {item.options?.option2}</h2>
+                            <h2>c) {item.options?.option3}</h2>
+                            <h2>d) {item.options?.option4}</h2> */}
                           </div>
                         ) : (
                           <></>
@@ -97,7 +109,7 @@ const QuestionList = () => {
                           {item.institutions.map((t, i) => (
                             <div className="ml-4 mt-8 " key={i}>
                               <h2 className="rounded text-sm py-1 px-2 bg-red-200 font-semibold text-red-600">
-                                {t.name} '{t.year}
+                                {t.name} &#39;{t.year}
                               </h2>
                             </div>
                           ))}
@@ -123,10 +135,10 @@ const QuestionList = () => {
                               <span className="text-xl font-semibold">Answer:</span>{" "}
                               {item.type === "mcq" ? (
                                 <span className=" ml-1">
-                                  {optionNumber[item.answerIndex]}. {item.options[item.answerIndex]}
+                                  {/* {optionNumber[item?.answerIndex]}. {item?.options && item?.options[item?.answerIndex]} */}
                                 </span>
                               ) : (
-                                <span className=" ml-1">{item.answerText}</span>
+                                <span className=" ml-1">{item?.answerText}</span>
                               )}
                             </h1>
                           </div>

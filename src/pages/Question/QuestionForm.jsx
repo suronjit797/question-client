@@ -51,14 +51,13 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   // effect
   useEffect(() => {
     if (mode === "edit" && data) {
-      setFormData(data);
-      form.setFieldsValue(data);
+      setFormData({ ...data, topics: data.topics?._id });
+      form.setFieldsValue({ ...data, topics: data.topics?._id });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, data]);
 
   useEffect(() => {
-    console.log({ topicData });
     if (Array.isArray(topicData)) {
       const data = topicData.map((t) => ({ label: t.topic, value: t._id }));
       setTopicOptions(data);
@@ -95,14 +94,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     return e?.fileList;
   };
 
-  // const normSingleFile = (e) => {
-  //   console.log(e);
-  //   if (Array.isArray(e)) {
-  //     return e[0];
-  //   }
-  //   return e?.fileList[0];
-  // };
-
   const handlerValueChange = (item, all) => {
     console.log(item);
     if (Object.keys(item)[0] === "optionType") {
@@ -124,9 +115,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
       text: topicError.response.data?.message || "Error Happen",
     });
   }
-
-  
-
 
   return (
     <Spin spinning={isTopicFetching}>
