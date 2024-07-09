@@ -4,7 +4,7 @@ import PrintMath from "../../components/PrintMath/PrintMath";
 import { useMutation } from "@tanstack/react-query";
 import { createQuestionFn, updateQuestionFn } from "../../transtackQuery/questionApis";
 // import Swal from "sweetalert2";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const optionNumber = {
   option1: "a",
@@ -14,7 +14,7 @@ const optionNumber = {
 };
 
 const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "create" }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // fetch
   const {
     mutate,
@@ -143,6 +143,8 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
     if (createSuccess || updateSuccess) {
       setIsModalOpen(false);
     }
+    // navigate("/questionForm")
+
   };
 
   // if (isError) {
