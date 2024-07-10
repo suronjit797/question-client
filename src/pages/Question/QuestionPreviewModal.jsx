@@ -143,7 +143,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
     if (createSuccess || updateSuccess) {
       setIsModalOpen(false);
     }
-    // navigate("/questionForm")
+    navigate("/question/create")
 
   };
 
