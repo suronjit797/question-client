@@ -56,7 +56,7 @@ const SearchForm = ({ params, setParams }) => {
           <Form.Item name="subject" label="Subject">
             <Select
               showSearch
-              placeholder="Select a subject"
+              placeholder="Select a Subject"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.subject}
               onChange={(e) => changeHandler("subject", e)}
