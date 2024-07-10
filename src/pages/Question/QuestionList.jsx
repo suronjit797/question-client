@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import userRole, { authAccess } from "../../utils/userRole";
 import { useState } from "react";
 import { deleteQuestionFn, getAllQuestionFn } from "../../transtackQuery/questionApis";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SideBar from "./component/SideBar";
 import SearchForm from "./component/SearchForm";
 import { Pagination, Spin, Tooltip } from "antd";
@@ -27,6 +27,7 @@ const QuestionList = () => {
   const [params, setParams] = useState({});
   const [solution, setSolution] = useState(false);
   const [filter, setFilter] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     data: question,
@@ -52,7 +53,7 @@ const QuestionList = () => {
     mutationKey: "deleteTopic",
     mutationFn: deleteQuestionFn,
     onSuccess: () => {
-      QueryClient.invalidateQueries({ queryKey: ["question"] });
+      queryClient.invalidateQueries({ queryKey: ["question", params] });
     },
   });
 
@@ -91,7 +92,7 @@ const QuestionList = () => {
         <div className=" w-[80%] mx-auto  pt-2 l">
           <div className="flex justify-between items-center mb-3 ms-auto">
             <Tooltip title="filter">
-              <BsFilterLeft onClick={filterHandler} className=" text-4xl text-green-700 ml-3" />
+              <BsFilterLeft onClick={filterHandler} className=" select-none cursor-pointer text-4xl text-green-700 ml-3" />
             </Tooltip>
             {authAccess(userRole.admin).includes(user?.role) && (
               <Link to="create" className=" mr-3 p-1 md:p-2  rounded  bg-primary text-accent hover:text-accent-hover">
@@ -104,7 +105,7 @@ const QuestionList = () => {
           </div>
           <div className="bg-gray-100 pt-4">
             <div className="ml-5 font-semibold text-xl">
-              Total <span className="text-green-500 text-xl">{data.length}</span> Question
+              Total <span className="text-green-500 text-xl">{meta.total}</span> Question
             </div>
             <Spin spinning={isFetching}>
               {Array.isArray(data)
@@ -178,8 +179,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item.options.option1.thumbUrl}
-                                          alt={item.options.option1.uid}
+                                          src={item?.options.option1?.thumbUrl}
+                                          alt={item?.options.option1?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -188,8 +189,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item.options.option2.thumbUrl}
-                                          alt={item.options.option2.uid}
+                                          src={item?.options.option2?.thumbUrl}
+                                          alt={item.options.option2?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -198,8 +199,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item.options.option3.thumbUrl}
-                                          alt={item.options.option3.uid}
+                                          src={item?.options.option3?.thumbUrl}
+                                          alt={item?.options.option3?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -208,8 +209,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item.options.option4.thumbUrl}
-                                          alt={item.options.option4.uid}
+                                          src={item?.options.option4?.thumbUrl}
+                                          alt={item?.options.option4?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -264,7 +265,7 @@ const QuestionList = () => {
                                           <span>{optionNumber[item?.answerIndex]}.</span>
                                           <img
                                             className=" max-w-48"
-                                            src={item?.options?.[item?.answerIndex].thumbUrl}
+                                            src={item?.options?.[item?.answerIndex]?.thumbUrl}
                                             alt=""
                                           />
                                         </span>
@@ -287,7 +288,7 @@ const QuestionList = () => {
                                   {item?.question?.images?.map((t, i) => {
                                     return (
                                       <div key={i} className="w-1/5 ">
-                                        <img src={t.thumbUrl} alt="Solution Photo" />
+                                        <img src={t?.thumbUrl} alt="Solution Photo" />
                                       </div>
                                     );
                                   })}
