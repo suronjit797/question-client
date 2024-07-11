@@ -167,7 +167,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   placeholder="Select Paper"
                   filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
-                  options={["first", "second"].map((item) => ({
+                  options={["১ম পত্র", "২য় পত্র"].map((item) => ({
                     label: <span className="capitalize">{item}</span>,
                     value: item,
                   }))}
