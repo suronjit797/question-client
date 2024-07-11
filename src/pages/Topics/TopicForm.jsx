@@ -115,7 +115,7 @@ const TopicForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Subject"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "").toLowerCase().includes(input.toLowerCase())}
                   showSearch={true}
                   options={subjectOption}
                 />
@@ -135,8 +135,8 @@ const TopicForm = ({ mode = "create", data = {} }) => {
                   placeholder="Select Paper"
                   filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                   showSearch={true}
-                  options={["first", "second"].map((item) => ({
-                    label: <span className="capitalize">{item}</span>,
+                  options={["১ম পত্র", "২য় পত্র"].map((item) => ({
+                    label: item,
                     value: item,
                   }))}
                 />
@@ -154,7 +154,7 @@ const TopicForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Chapter"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) => (option?.value ?? "").toLowerCase().includes(input.toLowerCase())}
                   showSearch={true}
                   options={chapterOptions}
                 />

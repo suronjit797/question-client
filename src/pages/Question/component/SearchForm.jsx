@@ -43,7 +43,7 @@ const SearchForm = ({ params, setParams }) => {
   const changeHandler = (name, value) => {
     if (["subject", "paper", "chapter"].includes(name)) {
       setParams((pre) => ({ ...pre, [name]: value, topic: undefined }));
-      form.setFieldsValue({topic:undefined})
+      form.setFieldsValue({ topic: undefined });
     } else {
       setParams((pre) => ({ ...pre, [name]: value }));
     }
@@ -57,7 +57,7 @@ const SearchForm = ({ params, setParams }) => {
             <Select
               showSearch
               placeholder="Select a Subject"
-              filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+              filterOption={(input, option) => (option?.value ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.subject}
               onChange={(e) => changeHandler("subject", e)}
               options={subjectOption}
@@ -70,8 +70,8 @@ const SearchForm = ({ params, setParams }) => {
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.paper}
               onChange={(e) => changeHandler("paper", e)}
-              options={["first", "second"].map((item) => ({
-                label: <span className="capitalize">{item}</span>,
+              options={["১ম পত্র", "২য় পত্র"].map((item) => ({
+                label: item,
                 value: item,
               }))}
             />
@@ -96,7 +96,10 @@ const SearchForm = ({ params, setParams }) => {
               options={topicOptions}
             />
           </Form.Item>
-          
+          <Form.Item label="Tags" name="tags">
+            <Select mode="tags" value={params.tags} maxTagCount="responsive" placeholder="Add Tags" />
+          </Form.Item>
+
           <Form.Item name="search" label="Search">
             <Input placeholder="Search" value={params.query} onChange={(e) => changeHandler("query", e.target.value)} />
           </Form.Item>

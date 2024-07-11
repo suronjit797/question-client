@@ -3,16 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import userRole, { authAccess } from "../../utils/userRole";
 import { useState } from "react";
 import { deleteQuestionFn, getAllQuestionFn } from "../../transtackQuery/questionApis";
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SideBar from "./component/SideBar";
 import SearchForm from "./component/SearchForm";
 import { Pagination, Spin, Tooltip } from "antd";
 import PrintMath from "../../components/PrintMath/PrintMath";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaFilter } from "react-icons/fa";
 import { GiArrowScope } from "react-icons/gi";
-import { BsFilterLeft } from "react-icons/bs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
+import { CiFilter } from "react-icons/ci";
 
 const optionNumber = {
   option1: "a",
@@ -31,7 +31,7 @@ const QuestionList = () => {
 
   const {
     data: question,
-    // isError,
+    isError,
     // error,
     isFetching,
   } = useQuery({
@@ -81,6 +81,15 @@ const QuestionList = () => {
     });
   };
 
+  if (isError) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      // text: topicError.response.data?.message || updateError.response.data?.message || "Error Happen",
+      text: "Error Happen",
+    });
+  }
+
   return (
     <div className=" mt-28">
       <div className="flex justify-start items-start ">
@@ -91,9 +100,16 @@ const QuestionList = () => {
         {/* question list */}
         <div className=" w-[80%] mx-auto  pt-2 l">
           <div className="flex justify-between items-center mb-3 ms-auto">
-            <Tooltip title="filter">
-              <BsFilterLeft onClick={filterHandler} className=" select-none cursor-pointer text-4xl text-green-700 ml-3" />
-            </Tooltip>
+            {filter ? (
+              <Tooltip title="filter">
+                <FaFilter onClick={filterHandler} className="select-none cursor-pointer text-2xl text-green-700 ml-3" />
+              </Tooltip>
+            ) : (
+              <Tooltip title="filter">
+                <CiFilter onClick={filterHandler} className="select-none cursor-pointer text-4xl text-green-700 ml-3" />
+              </Tooltip>
+            )}
+
             {authAccess(userRole.admin).includes(user?.role) && (
               <Link to="create" className=" mr-3 p-1 md:p-2  rounded  bg-primary text-accent hover:text-accent-hover">
                 <button className=" font-semibold"> Create Question </button>
@@ -216,11 +232,6 @@ const QuestionList = () => {
                                     </h2>
                                   </div>
                                 )}
-
-                                {/* <h2>a) {item.options?.option1}</h2>
-                            <h2>b) {item.options?.option2}</h2>
-                            <h2>c) {item.options?.option3}</h2>
-                            <h2>d) {item.options?.option4}</h2> */}
                               </div>
                             ) : (
                               <></>
@@ -249,16 +260,16 @@ const QuestionList = () => {
                             {/* solution */}
 
                             <div className={solution === item._id ? " block py-4 px-6 border-2 mt-4 mb-6" : "hidden"}>
-                              <div className=" flex items-start">
+                              <div className=" flex items-center">
                                 <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
-                                <h1 className=" flex items-start">
+                                <h1 className=" flex items-center gap-3">
                                   <span className="text-xl font-semibold">Answer:</span>{" "}
                                   {item.type === "mcq" ? (
                                     <span className=" ml-1">
                                       {typeof item.options?.option1 === "string" ? (
-                                        <span>
+                                        <span className="flex items-center gap-2">
                                           {optionNumber[item?.answerIndex]}.{" "}
-                                          {item?.options && item?.options[item?.answerIndex]}
+                                          <PrintMath text={item?.options && item?.options[item?.answerIndex]} />
                                         </span>
                                       ) : (
                                         <span className="flex items-start gap-2 mt-1 ml-6">
