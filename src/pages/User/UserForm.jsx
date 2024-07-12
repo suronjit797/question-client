@@ -1,6 +1,5 @@
-
 import { useMutation } from "@tanstack/react-query";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -21,11 +20,11 @@ const UserForm = () => {
   }
   const postFormData = (value) => {
     // console.log(value)
-    const { name, email, password } = value;
+    const { name, role, email, password } = value;
     const body = {
       name,
       email,
-      role: "student",
+      role,
       password,
     };
     mutate(body);
@@ -33,14 +32,12 @@ const UserForm = () => {
     navigate("/login");
   };
   return (
-    <div className=" bg-[url('/photo/photo1.web')] h-screen bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
+    <div className=" bg-[url('/photo/photo1.web')] h-screen mt-28 bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
       <div className=" md:col-span-4"></div>
-      <div className=" md:col-span-3 flex flex-col justify-center gap-4 p-14 md:h-full bg-black bg-opacity-35 rounded-xl ">
-        <div className="text-4xl text-[#BDE4A7] font-semibold text-center mb-4">
-          Registration
-        </div>
+      <div className=" md:col-span-3 flex flex-col items-center gap-4 p-14 md:h-full bg-primary bg-opacity-65 rounded-xl ">
+        <div className=" text-4xl text-[#97c57c] font-semibold text-center mb-4">Create User</div>
         <Form
-          className=" text-white"
+          className=" text-white grid md:grid-cols-2 md:gap-4 items-center"
           name="register"
           onFinish={postFormData}
           // onFinishFailed={onFinishFailed}
@@ -48,9 +45,7 @@ const UserForm = () => {
           layout="vertical"
         >
           <Form.Item
-            label={
-              <span style={{ fontSize: "16px", color: "white" }}>Name</span>
-            }
+            label={<span style={{ fontSize: "16px", color: "white" }}>Name</span>}
             name="name"
             rules={[
               {
@@ -59,11 +54,11 @@ const UserForm = () => {
               },
             ]}
           >
-            <Input placeholder="Input name" />
+            <Input placeholder="Input Name" />
           </Form.Item>
 
-          {/* <Form.Item
-            label="role"
+          <Form.Item
+            label={<span style={{ fontSize: "16px", color: "white" }}>Role</span>}
             name="role"
             rules={[
               {
@@ -73,6 +68,7 @@ const UserForm = () => {
             ]}
           >
             <Select
+              placeholder="Select Role"
               style={{
                 width: "100%",
               }}
@@ -85,16 +81,13 @@ const UserForm = () => {
                   value: "student",
                   label: "Student",
                 },
-                
               ]}
             />
-          </Form.Item> */}
+          </Form.Item>
 
           <Form.Item
             name="email"
-            label={
-              <span style={{ fontSize: "16px", color: "white" }}>E-mail</span>
-            }
+            label={<span style={{ fontSize: "16px", color: "white" }}>E-mail</span>}
             rules={[
               {
                 type: "email",
@@ -110,9 +103,7 @@ const UserForm = () => {
           </Form.Item>
 
           <Form.Item
-            label={
-              <span style={{ fontSize: "16px", color: "white" }}>Password</span>
-            }
+            label={<span style={{ fontSize: "16px", color: "white" }}>Password</span>}
             name="password"
             rules={[
               {
@@ -130,11 +121,7 @@ const UserForm = () => {
 
           <Form.Item
             name="confirm"
-            label={
-              <span style={{ fontSize: "16px", color: "white" }}>
-                Confirm Password
-              </span>
-            }
+            label={<span style={{ fontSize: "16px", color: "white" }}>Confirm Password</span>}
             dependencies={["password"]}
             rules={[
               {
@@ -151,25 +138,15 @@ const UserForm = () => {
               }),
             ]}
           >
-            <Input.Password placeholder="Confirm password" />
+            <Input.Password placeholder="Confirm Password" />
           </Form.Item>
 
           <Form.Item>
-            <Button
-              className="btn btn-primary"
-              type="primary"
-              htmlType="submit"
-            >
-              Submit
+            <Button className="btn btn-primary" type="primary" htmlType="submit">
+              Create
             </Button>
           </Form.Item>
         </Form>
-        <div className="text-xl text-center font-semibold">
-          Already Registered?{" "}
-          <Link to="/login" className=" text-xl text-[#BDE4A7] font-semibold">
-            Sing In
-          </Link>
-        </div>
       </div>
     </div>
   );

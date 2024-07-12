@@ -13,7 +13,7 @@ const generalRouts = [
 ];
 const adminRouts = [
   { name: "Topic", path: "/topic" },
-  // { name: "User", path: "/user" },
+  { name: "User", path: "/user" },
 ];
 
 const Header = () => {

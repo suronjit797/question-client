@@ -5,7 +5,7 @@ import { getSingleTopicFn } from "../../transtackQuery/topicApis";
 import { Spin } from "antd";
 import Swal from "sweetalert2";
 
-const TopicUpdate = () => {
+const UserUpdate = () => {
   const { id } = useParams();
 
   // transtack query
@@ -30,4 +30,4 @@ const TopicUpdate = () => {
   );
 };
 
-export default TopicUpdate;
+export default UserUpdate;

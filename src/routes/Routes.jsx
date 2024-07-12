@@ -12,6 +12,9 @@ import QuestionUpdate from "../pages/Question/QuestionUpdate";
 import TopicCreate from "../pages/Topics/TopicCreate";
 import TopicList from "../pages/Topics/TopicList";
 import TopicUpdate from "../pages/Topics/TopicUpdate";
+import UserList from "../pages/User/UserList";
+import UserCreate from "../pages/User/UserCreate";
+import UserUpdate from "../pages/User/UserUpdate";
 
 export const routes = createBrowserRouter([
   {
@@ -87,6 +90,33 @@ export const routes = createBrowserRouter([
           //! is user match his role
           <Auth roles={["admin"]}>
             <TopicUpdate />
+          </Auth>
+        ),
+      },
+      {
+        path: "/user",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <UserList />
+          </Auth>
+        ),
+      },
+      {
+        path: "/user/create",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <UserCreate />
+          </Auth>
+        ),
+      },
+      {
+        path: "/user/edit/:id",
+        element: (
+          //! is user match his role
+          <Auth roles={["admin"]}>
+            <UserUpdate />
           </Auth>
         ),
       },

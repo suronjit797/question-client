@@ -1,9 +1,9 @@
-import TopicForm from "./UserForm";
+import UserForm from "./UserForm";
 
 const UserCreate = () => {
   return (
     <div>
-      <TopicForm mode="create" />
+      <UserForm mode="create" />
     </div>
   );
 };
