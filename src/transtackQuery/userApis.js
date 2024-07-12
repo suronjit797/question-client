@@ -5,22 +5,23 @@ export const createTopicFn = (body) => {
     return axios.post("/users", body);
 };
 
-export const getAllTopicFn = async () => {
+export const getAllUserFn = async () => {
     const { data } = await axios.get("/users");
-    return data?.data||[]
+    return data 
+    // return data?.data||[]
   //   const topicData = data.data;
   //   return topicData;
   };
 
-export const getSingleTopicFn = async (id) => {
+export const getSingleUserFn = async (id) => {
     const { data } = await axios.get("/users/" + id);
     return data?.data||{}
   };
    
-export const updateTopicFn = ({ id, body }) => {
+export const updateUserFn = ({ id, body }) => {
     return axios.put("/users/" + id, body);
 };
   
-export const deleteTopicFn = ( id ) => {
+export const deleteUserFn = ( id ) => {
     return axios.delete("/users/" + id);
 };
