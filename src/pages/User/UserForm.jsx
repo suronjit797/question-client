@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input, Select } from "antd";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const createUser = (body) => {
   // console.log(body);
