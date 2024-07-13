@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Button, Form, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -5,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../../redux/features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const loginFunction = async (newTodo) => {
   const { data } = await axios.post("/users/login", newTodo);
@@ -14,7 +16,7 @@ const loginFunction = async (newTodo) => {
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, isLogin, user } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   const mutation = useMutation({
     mutationKey: ["login"],
     mutationFn: loginFunction,
@@ -29,7 +31,11 @@ const Login = () => {
             dispatch(setAuth({ token, user: userData?.data }));
           }
         } catch (error) {
-          console.log("User Login Failed");
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.response.data?.message || "Error happened",
+          });
         }
       }
       navigate("/");
@@ -41,7 +47,8 @@ const Login = () => {
     if (isLogin) {
       navigate("/");
     }
-  }, [isLogin]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogin ]);
 
   const handleLogin = (values) => {
     mutation.mutate(values);

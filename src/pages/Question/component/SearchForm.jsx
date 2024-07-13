@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
 import { getAllTopicFn } from "../../../transtackQuery/topicApis";
+import Swal from "sweetalert2";
 
 const initData = {};
 
@@ -17,8 +18,8 @@ const SearchForm = ({ params, setParams }) => {
   const {
     data: topics,
     isError: isTopicError,
-    error: topicError,
-    isFetching: isTopicFetching,
+    // error: topicError,
+    // isFetching: isTopicFetching,
   } = useQuery({
     queryKey: ["topic", subject, paper, chapter],
     queryFn: () => getAllTopicFn({ subject, paper, chapter, limit: 100 }),
@@ -48,6 +49,14 @@ const SearchForm = ({ params, setParams }) => {
       setParams((pre) => ({ ...pre, [name]: value }));
     }
   };
+
+  if(isTopicError){
+    return Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Error happened",
+    });
+  }
 
   return (
     <div className=" ">

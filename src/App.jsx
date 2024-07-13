@@ -1,14 +1,14 @@
 import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import { useEffect } from "react";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider } from "antd";
 import { routes } from "./routes/Routes";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 function App() {
-  const { token, isLogin, user } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   // set axios default auth token
   axios.defaults.headers.common["Authorization"] = token;
 
