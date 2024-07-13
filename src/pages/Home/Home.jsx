@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import QuestionForm from "../Question/QuestionForm";
 
 const fetchUsers = async () => {
   const { data } = await axios.get("/users");
   return data;
 };
 
-const Home = ({}) => {
+const Home = () => {
   const { isError, data, error, isFetching } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,

@@ -3,6 +3,8 @@ import {  useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, Form, Input, Button, Select } from "antd";
 import { useEffect } from "react";
 import { updateUserFn } from "../../transtackQuery/userApis";
+import PropTypes from "prop-types";
+
 
 const EditModal = ({ isModalOpen, editData, setIsModalOpen, }) => {
   const [form] = Form.useForm();
@@ -25,7 +27,7 @@ const EditModal = ({ isModalOpen, editData, setIsModalOpen, }) => {
     if (editData) {
       form.setFieldsValue(editData);
     }
-  }, [editData]);
+  }, [editData, form]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -99,6 +101,12 @@ const EditModal = ({ isModalOpen, editData, setIsModalOpen, }) => {
       </Form>
     </Modal>
   );
+};
+
+EditModal.propTypes = {
+  editData: PropTypes.object,
+  isModalOpen: PropTypes.object,
+  setIsModalOpen: PropTypes.object,
 };
 
 export default EditModal;

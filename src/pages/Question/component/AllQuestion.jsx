@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllQuestion } from "../../../../transtackQuery/topicApis";
 
 const AllQuestion = () => {
-    const { data, isError, error, isFetching } = useQuery({
+    const { data } = useQuery({
         queryKey: ["q"],
         queryFn: getAllQuestion,
       });

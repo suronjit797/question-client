@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Spin, Table } from "antd";
 import { useSelector } from "react-redux";

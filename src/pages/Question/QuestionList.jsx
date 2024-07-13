@@ -144,7 +144,7 @@ const QuestionList = () => {
                           )}
                           <div className="ml-9">
                             <h1 className="text-xl flex items-baseline gap-[6px] font-semibold">
-                              <span className="mr-3">{(meta.page - 1) * meta.limit + (index + 1)}.</span>
+                              <span className="mr-3">{(meta?.page - 1) * meta?.limit + (index + 1)}.</span>
                               <PrintMath text={item?.question?.text} />
                             </h1>
                             <div className="flex items-center gap-2 mt-3 w-auto h-auto">
@@ -166,25 +166,25 @@ const QuestionList = () => {
                                     <h2 className=" flex items-center gap-2">
                                       <span>a)</span>
                                       <span>
-                                        <PrintMath text={item.options?.option1} />
+                                        <PrintMath text={item?.options?.option1} />
                                       </span>
                                     </h2>
                                     <h2 className=" flex items-center gap-2">
                                       <span>b)</span>
                                       <span>
-                                        <PrintMath text={item.options?.option2} />
+                                        <PrintMath text={item?.options?.option2} />
                                       </span>
                                     </h2>
                                     <h2 className=" flex items-center gap-2">
                                       <span>c)</span>
                                       <span>
-                                        <PrintMath text={item.options?.option3} />
+                                        <PrintMath text={item?.options?.option3} />
                                       </span>
                                     </h2>
                                     <h2 className=" flex items-center gap-2">
                                       <span>d)</span>
                                       <span>
-                                        <PrintMath text={item.options?.option4} />
+                                        <PrintMath text={item?.options?.option4} />
                                       </span>
                                     </h2>
                                   </div>
@@ -195,8 +195,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item?.options.option1?.thumbUrl}
-                                          alt={item?.options.option1?.uid}
+                                          src={item?.options?.option1?.thumbUrl}
+                                          alt={item?.options?.option1?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -205,8 +205,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item?.options.option2?.thumbUrl}
-                                          alt={item.options.option2?.uid}
+                                          src={item?.options?.option2?.thumbUrl}
+                                          alt={item?.options?.option2?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -215,8 +215,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item?.options.option3?.thumbUrl}
-                                          alt={item?.options.option3?.uid}
+                                          src={item?.options?.option3?.thumbUrl}
+                                          alt={item?.options?.option3?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -225,8 +225,8 @@ const QuestionList = () => {
                                       <span className="p-5 pt-0">
                                         <img
                                           className=" md:max-w-52"
-                                          src={item?.options.option4?.thumbUrl}
-                                          alt={item?.options.option4?.uid}
+                                          src={item?.options?.option4?.thumbUrl}
+                                          alt={item?.options?.option4?.uid}
                                         />
                                       </span>
                                     </h2>
@@ -237,7 +237,7 @@ const QuestionList = () => {
                               <></>
                             )}
                             <div className=" flex justify-end items-center">
-                              {item.institutions.map((t, i) => (
+                              {item?.institutions.map((t, i) => (
                                 <div className="ml-4 mt-8 " key={i}>
                                   <h2 className="rounded text-sm py-1 px-2 bg-red-200 font-semibold text-red-600">
                                     {t.name} &#39;{t.year}
@@ -264,9 +264,9 @@ const QuestionList = () => {
                                 <GiArrowScope className=" text-2xl font-bold mr-[10px]" />
                                 <h1 className=" flex items-center gap-3">
                                   <span className="text-xl font-semibold">Answer:</span>{" "}
-                                  {item.type === "mcq" ? (
+                                  {item?.type === "mcq" ? (
                                     <span className=" ml-1">
-                                      {typeof item.options?.option1 === "string" ? (
+                                      {typeof item?.options?.option1 === "string" ? (
                                         <span className="flex items-center gap-2">
                                           {optionNumber[item?.answerIndex]}.{" "}
                                           <PrintMath text={item?.options && item?.options[item?.answerIndex]} />
@@ -316,10 +316,10 @@ const QuestionList = () => {
           </div>
           <div className="flex justify-end items-center mt-8 mb-28 mx-11">
             <Pagination
-              current={meta.page || 1}
-              pageSize={meta.limit || 10}
+              current={meta?.page || 1}
+              pageSize={meta?.limit || 10}
               onChange={handleTableChange}
-              total={meta.total || 0}
+              total={meta?.total || 0}
             />
           </div>
         </div>
