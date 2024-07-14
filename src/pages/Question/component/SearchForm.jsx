@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 const initData = {};
 
 const SearchForm = ({ params, setParams }) => {
+  console.log(setParams)
   const [form] = Form.useForm();
   const [chapterOptions, setChapterOptions] = useState();
   const [topicOptions, setTopicOptions] = useState([]);
