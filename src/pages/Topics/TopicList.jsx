@@ -45,7 +45,7 @@ const TopicList = () => {
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(10);
 
   const {
     data: topics,

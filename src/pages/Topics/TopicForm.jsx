@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 
 const initData = {};
 
-
 const TopicForm = ({ mode = "create", data = {} }) => {
   // react query
   const {
@@ -133,10 +132,10 @@ const TopicForm = ({ mode = "create", data = {} }) => {
               >
                 <Select
                   placeholder="Select Paper"
-                  filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                   showSearch={true}
-                  options={["১ম পত্র", "২য় পত্র"].map((item) => ({
-                    label: item,
+                  filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
+                  options={["first", "second"].map((item) => ({
+                    label: <span className="capitalize">{item}</span>,
                     value: item,
                   }))}
                 />
@@ -180,6 +179,5 @@ TopicForm.propTypes = {
   mode: PropTypes.string,
   data: PropTypes.object,
 };
-
 
 export default TopicForm;

@@ -1,12 +1,13 @@
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Form, Input, Select, Switch, Upload, Divider, Spin } from "antd";
+import { Button, Form, Input, Select, Switch, Upload, Divider, Spin, message } from "antd";
 import { useEffect, useState, useRef } from "react";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 import PropTypes from "prop-types";
 import { allChapters, institutionOption, subjectOption } from "../../utils/SelectOption";
 import { getAllTopicFn } from "../../transtackQuery/topicApis";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const currentYear = new Date().getFullYear();
 const yearOptions = [];
@@ -31,10 +32,32 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [topicOptions, setTopicOptions] = useState([]);
   const [topicName, setTopicName] = useState("");
-  const { type, subject, paper, chapter, optionType, question, solution } = formData;
+  const { type, subject, paper, chapter, optionType, question, options, solution } = formData;
 
   const [form] = Form.useForm();
   const inputRef = useRef(null);
+
+  const customUpload = ({ file, onSuccess, onError }) => {
+    const formData = new FormData();
+    formData.append("photos", file);
+
+    axios
+      .post("/upload", formData)
+      .then((response) => {
+        // onSuccess(response.data, file);]
+        if (response.data) {
+          console.log("success", response);
+          onSuccess(response.data, file);
+        } else {
+          throw new Error("No response data");
+        }
+      })
+      .catch((error) => {
+        console.error("Upload failed:", error);
+        onError(error);
+        message.error("Upload failed");
+      });
+  };
 
   const {
     data: topics,
@@ -44,6 +67,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   } = useQuery({
     queryKey: ["topic", subject, paper, chapter],
     queryFn: () => getAllTopicFn({ subject, paper, chapter, limit: 100 }),
+    refetchOnWindowFocus: false,
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const topicData = topics?.data || [];
@@ -87,15 +111,16 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     setIsModalOpen(true);
   };
 
-  const normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
+  const normFile = ({ fileList }) => {
+    console.log({ fileList });
+    if (Array.isArray(fileList)) {
+      return fileList.map((item) => item.response?.data).filter((item) => item !== undefined);
     }
-    return e?.fileList;
+    return fileList.response?.data ? [fileList.response?.data] : [];
   };
 
   const handlerValueChange = (item, all) => {
-    console.log(item);
+    console.log({ item, all });
     if (Object.keys(item)[0] === "optionType") {
       const opt = { option1: undefined, option2: undefined, option3: undefined, option4: undefined };
       form.setFieldsValue({ options: opt });
@@ -117,7 +142,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   }
 
   return (
-    <Spin spinning={isTopicFetching}>
+    <Spin spinning={false}>
       <div className="container mt-28 p-11 my-auto">
         <div className="max-w-[450px] mx-auto questionFrom">
           <Form
@@ -126,7 +151,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             onFinish={handleFinish}
             onFinishFailed={finishFailed}
             layout="vertical"
-            initialValues={initData}
             onValuesChange={handlerValueChange}
             scrollToFirstError={true}
           >
@@ -145,7 +169,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 <Select
                   placeholder="Select Subject"
                   filterOption={(input, option) => {
-                    console.log({ input, option });
                     return (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase());
                   }}
                   showSearch={true}
@@ -167,7 +190,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   placeholder="Select Paper"
                   filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
-                  options={["১ম পত্র", "২য় পত্র"].map((item) => ({
+                  options={["first", "second"].map((item) => ({
                     label: <span className="capitalize">{item}</span>,
                     value: item,
                   }))}
@@ -198,6 +221,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
                   showSearch={true}
                   options={topicOptions}
+                  loading={isTopicFetching}
                   dropdownRender={(menu) => (
                     <>
                       {menu}
@@ -250,21 +274,25 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                 label="Question Text"
                 rules={[{ required: true, message: "Input the question text" }]}
               >
-                <Input.TextArea
-                  rows={4}
-                  onChange={(e) => console.log({ e: String.raw`${e.target.value}` })}
-                  placeholder="Enter Question Text"
-                />
+                <Input.TextArea rows={4} placeholder="Enter Question Text" />
               </Form.Item>
 
               <Form.Item
                 name={["question", "images"]}
                 label="Question Image"
-                valuePropName="fileList"
                 getValueFromEvent={normFile}
                 layout="horizontal"
               >
-                <Upload listType="picture" beforeUpload={() => false} maxCount={5}>
+                <Upload
+                  fileList={question?.images}
+                  onChange={({ fileList }) => {
+                    form.setFieldsValue({ question: { ...question, images: fileList } });
+                    setFormData({ ...formData, question: { ...question, images: fileList } });
+                  }}
+                  customRequest={customUpload}
+                  listType="picture"
+                  maxCount={5}
+                >
                   <Button disabled={question?.images?.length >= 5} icon={<UploadOutlined />}>
                     Upload
                   </Button>
@@ -281,25 +309,33 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                       {[1, 2, 3, 4].map((item) => (
                         <Form.Item
                           key={item}
-                          // name={`option${item}`}
                           name={["options", `option${item}`]}
                           label={`Option ${item}`}
                           rules={[{ required: true, message: `Input the option ${item}` }]}
-                          // getValueFromEvent={normFile}
                           getValueFromEvent={normFile}
                           layout="horizontal"
                           className="imageOption"
                         >
                           <Upload
+                            customRequest={customUpload}
                             listType="picture"
-                            fileList={
-                              formData.options[`option${item}`]
-                                ? Array.isArray(formData.options[`option${item}`])
-                                  ? formData.options[`option${item}`]
-                                  : [formData.options[`option${item}`]]
-                                : undefined
-                            }
-                            beforeUpload={() => false}
+                            maxCount={1}
+                            fileList={options[`option${item}`]}
+                            onChange={({ fileList }) => {
+                              form.setFieldsValue({ options: { ...options, [`option${item}`]: fileList } });
+                              setFormData({ ...formData, options: { ...options, [`option${item}`]: fileList } });
+                            }}
+                          >
+                            {formData.options && formData.options[`option${item}`]?.length ? (
+                              ""
+                            ) : (
+                              <Button icon={<UploadOutlined />}>Upload</Button>
+                            )}
+                          </Upload>
+                          {/* <Upload
+                            customRequest={customUpload}
+                            listType="picture"
+                            fileList={formData.options[`option${item}`]}
                             maxCount={1}
                             multiple={false}
                           >
@@ -308,7 +344,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                             ) : (
                               <Button icon={<UploadOutlined />}>Upload</Button>
                             )}
-                          </Upload>
+                          </Upload> */}
                         </Form.Item>
                       ))}
                     </>
@@ -451,16 +487,25 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
               <Form.Item
                 name={["solution", "images"]}
                 label="Solution Image"
-                valuePropName="fileList"
                 getValueFromEvent={normFile}
                 layout="horizontal"
               >
-                <Upload listType="picture" beforeUpload={() => false} maxCount={5}>
+                <Upload
+                  fileList={solution?.images}
+                  onChange={({ fileList }) => {
+                    form.setFieldsValue({ solution: { ...solution, images: fileList } });
+                    setFormData({ ...formData, solution: { ...solution, images: fileList } });
+                  }}
+                  customRequest={customUpload}
+                  listType="picture"
+                  maxCount={5}
+                >
                   <Button disabled={solution?.images?.length >= 5} icon={<UploadOutlined />}>
                     Upload
                   </Button>
                 </Upload>
               </Form.Item>
+       
             </div>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -470,7 +515,7 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
           </Form>
         </div>
         {isModalOpen && (
-          <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, mode }} />
+          <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, setFormData, mode, form }} />
         )}
       </div>
     </Spin>
