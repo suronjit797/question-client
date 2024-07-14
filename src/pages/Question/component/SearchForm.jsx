@@ -10,7 +10,7 @@ const initData = {};
 
 const SearchForm = ({ params, setParams }) => {
   const [form] = Form.useForm();
-  const [chapterOptions, setChapterOptions] = useState();
+  const [chapterOptions, setChapterOptions] = useState([]);
   const [topicOptions, setTopicOptions] = useState([]);
 
   const { subject, paper, chapter } = params;
@@ -50,7 +50,7 @@ const SearchForm = ({ params, setParams }) => {
     }
   };
 
-  if(isTopicError){
+  if (isTopicError) {
     return Swal.fire({
       icon: "error",
       title: "Oops...",
@@ -64,6 +64,7 @@ const SearchForm = ({ params, setParams }) => {
         <div className=" grid grid-cols-2 px-3 py-2 gap-4">
           <Form.Item name="subject" label="Subject">
             <Select
+              allowClear={true}
               showSearch
               placeholder="Select a Subject"
               filterOption={(input, option) => (option?.value ?? "").toLowerCase().includes(input.toLowerCase())}
@@ -74,19 +75,21 @@ const SearchForm = ({ params, setParams }) => {
           </Form.Item>
           <Form.Item name="paper" label="Paper">
             <Select
-              showSearch
-              placeholder="Select a Paper"
-              filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+              allowClear={true}
+              placeholder="Select Paper"
+              showSearch={true}
               value={params.paper}
               onChange={(e) => changeHandler("paper", e)}
-              options={["১ম পত্র", "২য় পত্র"].map((item) => ({
-                label: item,
+              filterOption={(input, option) => (option?.value ?? "")?.toLowerCase()?.includes(input?.toLowerCase())}
+              options={["first", "second"].map((item) => ({
+                label: <span className="capitalize">{item}</span>,
                 value: item,
               }))}
             />
           </Form.Item>
           <Form.Item name="chapter" label="Chapter">
             <Select
+              allowClear={true}
               showSearch
               placeholder="Select a Chapter"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
@@ -97,16 +100,24 @@ const SearchForm = ({ params, setParams }) => {
           </Form.Item>
           <Form.Item name="topic" label="Topic">
             <Select
+              allowClear={true}
               showSearch
               placeholder="Select a Topic"
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               value={params.topic}
-              onChange={(e) => changeHandler("topic", e)}
+              onChange={(e) => changeHandler("topics", e)}
               options={topicOptions}
             />
           </Form.Item>
           <Form.Item label="Tags" name="tags">
-            <Select mode="tags" value={params.tags} maxTagCount="responsive" placeholder="Add Tags" />
+            <Select
+              allowClear={true}
+              mode="tags"
+              value={params.tags}
+              onChange={(e) => changeHandler("tags", e)}
+              maxTagCount="responsive"
+              placeholder="Add Tags"
+            />
           </Form.Item>
 
           <Form.Item name="search" label="Search">

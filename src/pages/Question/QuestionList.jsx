@@ -32,7 +32,7 @@ const QuestionList = () => {
   const {
     data: question,
     isError,
-    // error,
+    error,
     isFetching,
   } = useQuery({
     queryKey: ["question", params],
@@ -63,7 +63,6 @@ const QuestionList = () => {
   const filterHandler = () => {
     setFilter(!filter);
   };
-  console.log(data);
 
   const deleteHandler = (id) => {
     Swal.fire({
@@ -82,11 +81,10 @@ const QuestionList = () => {
   };
 
   if (isError) {
-    Swal.fire({
+    return Swal.fire({
       icon: "error",
       title: "Oops...",
-      // text: topicError.response.data?.message || updateError.response.data?.message || "Error Happen",
-      text: "Error Happen",
+      text: error.response.data?.message || "Error Happen",
     });
   }
 

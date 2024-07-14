@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createQuestionFn, updateQuestionFn } from "../../transtackQuery/questionApis";
 // import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const optionNumber = {
   option1: "a",
@@ -13,13 +14,26 @@ const optionNumber = {
   option4: "d",
 };
 
-const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "create" }) => {
+const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "create", form, setFormData }) => {
   const navigate = useNavigate();
+
+  const handleReset = (excludeFields = []) => {
+    const fieldsToReset = form.getFieldsValue();
+    const resetValues = {};
+
+    Object.keys(fieldsToReset).forEach((key) => {
+      if (!excludeFields.includes(key)) {
+        resetValues[key] = undefined;
+      }
+    });
+    setFormData(resetValues);
+    form.setFieldsValue(resetValues);
+  };
   // fetch
   const {
     mutate,
-    // isError,
-    // error,
+    isError,
+    error,
     isSuccess: createSuccess,
   } = useMutation({
     mutationKey: "createQuestion",
@@ -28,8 +42,8 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
 
   const {
     mutate: update,
-    //  isError:isUpdateError,
-    // error,
+    isError: isUpdateError,
+    error: updateError,
     isSuccess: updateSuccess,
   } = useMutation({
     mutationKey: "updateQuestion",
@@ -59,110 +73,32 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
   const optionsItems = Object?.keys(options || {});
 
   const handleOk = () => {
-    const formData = new FormData();
-    const { question, solution, tags, options, optionType, institutions, ...rest } = data;
-
-    formData.append("optionType", Boolean(optionType));
-
-    Object.keys(rest)?.forEach((key, value) => {
-      if (rest[key] !== undefined && rest[key] !== null) {
-        console.log({ key, value, v: rest[key] });
-        formData.append(key, rest[key]);
-      }
-    });
-
-    if (question?.text) {
-      formData.append("question[text]", question.text);
-    }
-    if (solution?.text) {
-      formData.append("solution[text]", solution.text);
-    }
-
-    if (question?.images) {
-      question.images?.forEach((image, index) => {
-        if (image.originFileObj) {
-          formData.append(`question.images`, image.originFileObj);
-        } else {
-          formData.append(`question[images][${index}][uid]`, image.uid);
-          formData.append(`question[images][${index}][name]`, image.name);
-          formData.append(`question[images][${index}][thumbUrl]`, image.thumbUrl);
-          formData.append(`question[images][${index}][size]`, image.size);
-          formData.append(`question[images][${index}][type]`, image.type);
-        }
-      });
-    }
-    if (solution?.images) {
-      solution.images?.forEach((image, index) => {
-        if (image.originFileObj) {
-          formData.append(`solution.images`, image.originFileObj);
-        } else {
-          formData.append(`solution[images][${index}][uid]`, image.uid);
-          formData.append(`solution[images][${index}][name]`, image.name);
-          formData.append(`solution[images][${index}][thumbUrl]`, image.thumbUrl);
-          formData.append(`solution[images][${index}][size]`, image.size);
-          formData.append(`solution[images][${index}][type]`, image.type);
-        }
-      });
-    }
-    if (tags) {
-      tags?.forEach((tag, index) => {
-        formData.append(`tags[${index}]`, tag);
-      });
-    }
-
-    if (data?.options) {
-      Object.keys(data?.options || {})?.forEach((key) => {
-        console.log(options[key], key, data);
-        if (!options[key]) {
-          console.log("");
-        } else if (typeof options[key] === "string") {
-          formData.append(`options[${key}]`, options[key]);
-        } else if (options[key][0]?.originFileObj) {
-          formData.append(`options.${key}`, options[key][0].originFileObj);
-        } else {
-          formData.append(`options[${key}][uid]`, options[key].uid);
-          formData.append(`options[${key}][name]`, options[key].name);
-          formData.append(`options[${key}][thumbUrl]`, options[key].thumbUrl);
-          formData.append(`options[${key}][size]`, options[key].size);
-          formData.append(`options[${key}][type]`, options[key].type);
-        }
-      });
-    }
-    if (Array.isArray(institutions)) {
-      institutions?.forEach((institution, index) => {
-        formData.append(`institutions[${index}][name]`, institution.name);
-        formData.append(`institutions[${index}][year]`, institution.year);
-      });
-    }
+    const formData = { ...data };
+    console.log({ formData });
     console.log({ mode });
     if (mode === "create") {
       mutate(formData);
     } else {
       update({ id: data._id, body: formData });
     }
-    if (createSuccess || updateSuccess) {
-      setIsModalOpen(false);
-    }
-    navigate("/question/create")
-
   };
 
-  // if (isError) {
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "Oops...",
-  //     text: error.response.data?.message || "Error Happen",
-  //   });
-  // }
+  if (createSuccess) {
+    setIsModalOpen(false);
+    handleReset(["subject", "paper", "chapter", "topics"]);
+  }
+  if (updateSuccess) {
+    setIsModalOpen(false);
+    navigate("/question");
+  }
 
-  // if (createSuccess) {
-  //   Swal.fire({
-  //     icon: "success",
-  //     title: "Success",
-  //     text: "Question Created Successfully",
-  //   });
-  //   navigate("/questionForm");
-  // }
+  if (isError || isUpdateError) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.response?.data?.message || updateError.response?.data?.message || "Error Happen",
+    });
+  }
 
   return (
     <>
@@ -221,7 +157,9 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
                       {typeof options[item] === "string" ? (
                         <PrintMath text={options[item]} />
                       ) : (
-                        <img src={options[item]?.thumbUrl} alt={options[item]?.uid} />
+                        Array.isArray(options[item]) && (
+                          <img src={options[item][0]?.thumbUrl} alt={options[item][0]?.uid} />
+                        )
                       )}
                     </div>
                   </div>
@@ -285,6 +223,8 @@ QuestionPreviewModal.propTypes = {
   setIsModalOpen: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   mode: PropTypes.string.isRequired,
+  form: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
 };
 
 export default QuestionPreviewModal;

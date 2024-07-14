@@ -9,11 +9,27 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 
 // use without lazy
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      onError: (error) => {
+        // Handle query errors globally
+        console.log("Query error:", error);
+      },
+    },
+    mutations: {
+      onError: (error) => {
+        // Handle mutation errors globally
+        console.log("Mutation error:", error);
+      },
+    },
+  },
+});
 
-const queryClient = new QueryClient();
 // axios base url
-// axios.defaults.baseURL = "http://localhost:5000/api/v1";
-axios.defaults.baseURL = "https://question-server-jm21.onrender.com/api/v1";
+axios.defaults.baseURL = "http://localhost:5000/api/v1";
+// axios.defaults.baseURL = "https://question-server-jm21.onrender.com/api/v1";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
