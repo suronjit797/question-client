@@ -50,7 +50,7 @@ const QuestionList = () => {
     // isPending: isDeletePending,
     // isSuccess: isDeleteSuccess,
   } = useMutation({
-    mutationKey: "deleteTopic",
+    mutationKey: "deleteQuestion",
     mutationFn: deleteQuestionFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["question", params] });
@@ -81,7 +81,7 @@ const QuestionList = () => {
   };
 
   if (isError) {
-    return Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Oops...",
       text: error.response.data?.message || "Error Happen",
@@ -292,7 +292,7 @@ const QuestionList = () => {
                                 <h1 className="text-xl font-semibold">Solution:</h1>
                               </div>
                               <div className="mt-2 mb-6 text-justify">
-                                <PrintMath text={item?.solution.text} />
+                                <PrintMath text={item?.solution.text || ""} />
                                 <div className="flex items-center gap-2 mt-2 w-auto h-auto">
                                   {item?.question?.images?.map((t, i) => {
                                     return (

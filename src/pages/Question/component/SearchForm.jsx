@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 const initData = {};
 
 const SearchForm = ({ params, setParams }) => {
-  console.log(setParams)
   const [form] = Form.useForm();
   const [chapterOptions, setChapterOptions] = useState([]);
   const [topicOptions, setTopicOptions] = useState([]);
@@ -19,8 +18,8 @@ const SearchForm = ({ params, setParams }) => {
   const {
     data: topics,
     isError: isTopicError,
-    // error: topicError,
-    // isFetching: isTopicFetching,
+    error: topicError,
+    isFetching: isTopicFetching,
   } = useQuery({
     queryKey: ["topic", subject, paper, chapter],
     queryFn: () => getAllTopicFn({ subject, paper, chapter, limit: 100 }),
@@ -29,7 +28,7 @@ const SearchForm = ({ params, setParams }) => {
   useEffect(() => {
     const topicData = topics?.data || [];
     if (Array.isArray(topicData)) {
-      const data = topicData.map((t) => ({ label: t.topic, value: t._id }));
+      const data = topicData?.map((t) => ({ label: t.topic, value: t._id }));
       setTopicOptions(data);
     }
   }, [topics]);
@@ -52,10 +51,10 @@ const SearchForm = ({ params, setParams }) => {
   };
 
   if (isTopicError) {
-    return Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: "Error happened",
+      text: topicError.response?.data?.message || "Error happened",
     });
   }
 
@@ -108,6 +107,7 @@ const SearchForm = ({ params, setParams }) => {
               value={params.topic}
               onChange={(e) => changeHandler("topics", e)}
               options={topicOptions}
+              loading={isTopicFetching}
             />
           </Form.Item>
           <Form.Item label="Tags" name="tags">
@@ -132,7 +132,7 @@ const SearchForm = ({ params, setParams }) => {
 
 SearchForm.propTypes = {
   params: PropTypes.object,
-  setParams: PropTypes.object,
+  setParams: PropTypes.func,
 };
 
 export default SearchForm;

@@ -8,14 +8,13 @@ const createUser = (body) => {
   return axios.post("/users/register", body);
 };
 const UserForm = () => {
-
   const { mutate, isError, error } = useMutation({
     mutationKey: "creatUser",
     mutationFn: createUser,
-    onSuccess:async(data) => {
+    onSuccess: async (data) => {
       await Swal.fire({
         title: "Success!",
-        text: data.response?.message||"You have successfully registered.",
+        text: data.response?.message || "You have successfully registered.",
         icon: "success",
         confirmButtonText: "OK",
       });
@@ -24,7 +23,7 @@ const UserForm = () => {
     },
   });
   if (isError) {
-    return Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Oops...",
       text: error.response.data?.message || "Error happened",
