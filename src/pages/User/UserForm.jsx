@@ -1,22 +1,34 @@
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input, Select } from "antd";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const createUser = (body) => {
   // console.log(body);
   return axios.post("/users/register", body);
 };
 const UserForm = () => {
-  const navigate = useNavigate();
 
-  const { mutate, isError } = useMutation({
+  const { mutate, isError, error } = useMutation({
     mutationKey: "creatUser",
     mutationFn: createUser,
-  });
+    onSuccess:async(data) => {
+      await Swal.fire({
+        title: "Success!",
+        text: data.response?.message||"You have successfully registered.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
 
+      // navigate("/login");
+    },
+  });
   if (isError) {
-    return <h1>Error</h1>;
+    return Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.response.data?.message || "Error happened",
+    });
   }
   const postFormData = (value) => {
     // console.log(value)
@@ -29,7 +41,6 @@ const UserForm = () => {
     };
     mutate(body);
     console.log(body);
-    navigate("/login");
   };
   return (
     <div className=" bg-[url('/photo/photo1.web')] h-screen mt-28 bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
