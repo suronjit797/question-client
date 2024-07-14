@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   if (isError) {
-    return Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Oops...",
       text: error.response.data?.message || "Error happened",
