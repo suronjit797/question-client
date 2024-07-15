@@ -82,7 +82,6 @@ const TopicList = () => {
   }
 
   const editHandler = (record) => {
-    console.log(record);
     navigate(`/topic/edit/${record._id}`);
   };
 

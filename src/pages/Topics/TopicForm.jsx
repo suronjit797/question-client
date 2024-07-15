@@ -56,13 +56,8 @@ const TopicForm = ({ mode = "create", data = {} }) => {
     if (mode === "create") {
       createTopic(values);
     } else {
-      console.log({ values });
       updateTopic({ id: data._id, body: values });
     }
-  };
-
-  const finishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   const handlerValueChange = (changedValues, allValues) => {
@@ -95,7 +90,6 @@ const TopicForm = ({ mode = "create", data = {} }) => {
             form={form}
             name="createQuestion"
             onFinish={handleFinish}
-            onFinishFailed={finishFailed}
             layout="vertical"
             initialValues={initData}
             onValuesChange={handlerValueChange}

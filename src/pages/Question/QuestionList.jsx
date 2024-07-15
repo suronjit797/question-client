@@ -41,7 +41,7 @@ const QuestionList = () => {
   });
   const data = question?.data || [];
   const meta = question?.meta || {};
-  console.log(data);
+
 
   const {
     mutate: deleteQuestion,

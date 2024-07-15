@@ -19,10 +19,6 @@ for (let i = currentYear; i >= 1990; i--) {
   yearOptions.push({ label: `${i - 1}-${i}`, value: `${i - 1}-${i}` });
 }
 
-const finishFailed = (values) => {
-  console.log("error", values);
-};
-
 const initData = {};
 
 const QuestionForm = ({ mode = "create", data = {} }) => {
@@ -46,14 +42,12 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
       .then((response) => {
         // onSuccess(response.data, file);]
         if (response.data) {
-          console.log("success", response);
           onSuccess(response.data, file);
         } else {
           throw new Error("No response data");
         }
       })
       .catch((error) => {
-        console.error("Upload failed:", error);
         onError(error);
         message.error("Upload failed");
       });
@@ -106,13 +100,11 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
     inputRef.current?.focus();
   };
 
-  const handleFinish = async (values) => {
-    console.log("Form Values:", values);
+  const handleFinish = async () => {
     setIsModalOpen(true);
   };
 
   const normFile = ({ fileList }) => {
-    console.log({ fileList });
     if (Array.isArray(fileList)) {
       return fileList.map((item) => item.response?.data).filter((item) => item !== undefined);
     }
@@ -120,7 +112,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
   };
 
   const handlerValueChange = (item, all) => {
-    console.log({ item, all });
     if (Object.keys(item)[0] === "optionType") {
       const opt = { option1: undefined, option2: undefined, option3: undefined, option4: undefined };
       form.setFieldsValue({ options: opt });
@@ -149,7 +140,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
             form={form}
             name="createQuestion"
             onFinish={handleFinish}
-            onFinishFailed={finishFailed}
             layout="vertical"
             onValuesChange={handlerValueChange}
             scrollToFirstError={true}
@@ -505,7 +495,6 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
                   </Button>
                 </Upload>
               </Form.Item>
-       
             </div>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -515,7 +504,9 @@ const QuestionForm = ({ mode = "create", data = {} }) => {
           </Form>
         </div>
         {isModalOpen && (
-          <QuestionPreviewModal {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, setFormData, mode, form }} />
+          <QuestionPreviewModal
+            {...{ isModalOpen, setIsModalOpen, data: { ...data, ...formData }, setFormData, mode, form }}
+          />
         )}
       </div>
     </Spin>

@@ -22,7 +22,6 @@ const MobileNav = ({ routs = [] }) => {
   const [isActiv, setIsActiv] = useState(false);
   const navMenue = () => {
     setIsActiv(!isActiv);
-    console.log("yes");
   };
   return (
     <nav className=" flex gap-8  ">

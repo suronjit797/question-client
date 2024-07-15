@@ -74,8 +74,6 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
 
   const handleOk = () => {
     const formData = { ...data };
-    console.log({ formData });
-    console.log({ mode });
     if (mode === "create") {
       mutate(formData);
     } else {
@@ -171,14 +169,23 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
 
           <hr className="my-3" />
 
-          <div>
+          <div className="flex items-center gap-1">
             <span className="font-bold">Answer:</span>
             {type === "mcq" ? (
               <span>
-                {optionType ? optionNumber[answerIndex] : `${optionNumber[answerIndex]}. ${data.options[answerIndex]}`}
+                {optionType ? (
+                  optionNumber[answerIndex]
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <p>{optionNumber[answerIndex]}.</p>
+                    <p>
+                      <PrintMath text={data.options[answerIndex]} />{" "}
+                    </p>
+                  </div>
+                )}
               </span>
             ) : (
-              <span>{answerText}</span>
+              <PrintMath text={answerText} />
             )}
           </div>
 
@@ -186,7 +193,7 @@ const QuestionPreviewModal = ({ isModalOpen, setIsModalOpen, data, mode = "creat
             <span className="font-bold">Difficulty:</span> {difficulty}
           </div>
           <div>
-            <span className="font-bold">Tags:</span>
+            <span className="font-bold">Tags: </span>
             {Array.isArray(tags) &&
               tags?.map((tag, ind) => (
                 <Tag color="geekblue" key={ind}>
