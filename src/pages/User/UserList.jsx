@@ -170,7 +170,6 @@ const UserList = () => {
           isModalOpen={isModalOpen}
           editData={editData}
           setIsModalOpen={setIsModalOpen}
-          // onSave={saveHandler}
         />
       )}
     </div>

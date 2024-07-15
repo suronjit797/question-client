@@ -12,7 +12,6 @@ function PrintMath({ text = "" }) {
           return <span key={index}>{part}</span>;
         } else {
           const correctedMath = part.replace(/\\\\/g, "\\");
-          console.log({correctedMath})
           return <BlockMath key={index} math={correctedMath} />;
         }
       })}

@@ -5,10 +5,7 @@ const { Option } = Select;
 const QuestionInput = () => {
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
-    console.log("Form Values:", values);
-    // process form values here
-  };
+ 
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -19,7 +16,7 @@ const QuestionInput = () => {
 
   return (
     <div className="container p-11 my-auto">
-      <Form form={form} onFinish={handleFinish} layout="vertical">
+      <Form form={form} layout="vertical">
         <div className="grid grid-cols-2 gap-6">
           <Form.Item name="type" label="Type" rules={[{ required: true, message: "Please select the type" }]}>
             <Radio.Group>

@@ -36,7 +36,6 @@ const SearchForm = ({ params, setParams }) => {
   useEffect(() => {
     if (subject && paper) {
       const chapters = allChapters.find((c) => c.subject === subject && c.paper === paper)?.chapters || [];
-      console.log(chapters);
       setChapterOptions(chapters.map((c) => ({ label: <span className="capitalize">{c}</span>, value: c })));
     }
   }, [paper, subject]);

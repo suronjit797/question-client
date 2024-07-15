@@ -39,7 +39,6 @@ const UserForm = () => {
       password,
     };
     mutate(body);
-    console.log(body);
   };
   return (
     <div className=" bg-[url('/photo/photo1.web')] h-screen mt-28 bg-cover bg-opacity-50 backdrop-blur-xl bg-center md:grid md:grid-cols-7 min-h-screen text-white p-6 overflow-y-auto items-center ">
@@ -50,7 +49,6 @@ const UserForm = () => {
           className=" text-white grid md:grid-cols-2 md:gap-4 items-center"
           name="register"
           onFinish={postFormData}
-          // onFinishFailed={onFinishFailed}
           autoComplete="off"
           layout="vertical"
         >

@@ -14,10 +14,10 @@ const Register = () => {
   const { mutate, isError, error } = useMutation({
     mutationKey: "creatUser",
     mutationFn: createUser,
-    onSuccess:async(data) => {
+    onSuccess: async (data) => {
       await Swal.fire({
         title: "Success!",
-        text: data.response?.message||"You have successfully registered.",
+        text: data.response?.message || "You have successfully registered.",
         icon: "success",
         confirmButtonText: "OK",
       });
@@ -57,7 +57,6 @@ const Register = () => {
           className=" text-white"
           name="register"
           onFinish={postFormData}
-          // onFinishFailed={onFinishFailed}
           autoComplete="off"
           layout="vertical"
         >
@@ -73,34 +72,6 @@ const Register = () => {
           >
             <Input placeholder="Input name" />
           </Form.Item>
-
-          {/* <Form.Item
-            label="role"
-            name="role"
-            rules={[
-              {
-                required: true,
-                message: "Please input your role!",
-              },
-            ]}
-          >
-            <Select
-              style={{
-                width: "100%",
-              }}
-              options={[
-                {
-                  value: "admin",
-                  label: "Admin",
-                },
-                {
-                  value: "student",
-                  label: "Student",
-                },
-                
-              ]}
-            />
-          </Form.Item> */}
 
           <Form.Item
             name="email"
